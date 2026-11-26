@@ -1,51 +1,75 @@
-# FVREVER Analytics — Backend Vercel + Supabase
+# 🌸 FVREVER — Launcher & Analytics
 
-Este paquete agrega API real al panel existente. Conserva el diseño del `index.html` y reemplaza el acceso local por una sesión firmada en servidor.
+<p align="center">
+  **Un launcher hecho con cariño, pensado para ofrecer una experiencia cómoda y agradable.**
+</p>
 
-## 1. Variables de entorno en Vercel
+¡Bienvenido a **FVREVER**! 🌷
 
-En **Project → Settings → Environment Variables**, agrega (Production, Preview y Development):
+FVREVER es un proyecto que combina un launcher personalizado con una plataforma de estadísticas para conocer el crecimiento y la actividad del proyecto.
 
-- `SUPABASE_URL` = URL del proyecto Supabase.
-- `SUPABASE_SERVICE_ROLE_KEY` = clave `service_role` (secreta; nunca ponerla en HTML ni compartirla).
-- `DASHBOARD_PASSWORD` = contraseña fuerte para entrar al panel.
-- `SESSION_SECRET` = secreto aleatorio largo (mínimo 32 caracteres).
+Nuestro objetivo es ofrecer una experiencia fluida, sencilla y agradable, mejorando constantemente gracias a las sugerencias de la comunidad.
 
-Para generar `SESSION_SECRET` en Windows PowerShell:
-```powershell
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-Copia el resultado en Vercel. No lo publiques en GitHub.
+━━━━━━━━━━━━━━━━━━━━━━
 
-## 2. Supabase
+## 🎮・¿Qué es FVREVER Launcher?
 
-Usa las tablas `public.installations` y `public.analytics_events` creadas con el SQL anterior. La API usa la clave de servidor; no expone esa clave al navegador ni al launcher.
+**FVREVER Launcher** es un launcher personalizado desarrollado para facilitar el acceso y ofrecer una experiencia cómoda a sus usuarios.
 
-## 3. Archivos
+### ✨ Características
+- 🚀 Inicio rápido y rendimiento optimizado.
+- 🎨 Interfaz sencilla y agradable.
+- ⚙️ Funciones diseñadas para facilitar su uso.
+- 📦 Seguimiento de versiones e instalaciones.
+- 🌱 Mejoras y optimizaciones constantes.
 
-- `index.html`: panel web, autenticación y lectura de estadísticas.
-- `api/auth.py`: login, validación de sesión y logout.
-- `api/telemetry.py`: endpoint público `POST /api/telemetry`.
-- `api/dashboard.py`: endpoint privado `GET /api/dashboard`.
-- `vercel.json`: configuración de funciones Python.
+Queremos que utilizar FVREVER sea una experiencia agradable desde el primer momento.
 
-## 4. Despliegue
+━━━━━━━━━━━━━━━━━━━━━━
 
-Sube todos los archivos manteniendo la estructura a la raíz del repositorio y espera el despliegue `Ready`.
+## 📊・FVREVER Analytics Dashboard
 
-Prueba:
-- `https://TU-DOMINIO/api/auth` debe responder `401` sin sesión (normal).
-- El panel inicia sesión usando `DASHBOARD_PASSWORD`.
-- `POST /api/telemetry` recibe JSON con `installation_id` (UUID), `launcher_version` y `optional_consent` (boolean).
+**FVREVER Analytics** es el proyecto complementario del launcher.
 
-## 5. Privacidad
+Se trata de un dashboard privado que permite visualizar estadísticas sobre el crecimiento y uso de FVREVER.
 
-Siempre se registra un UUID aleatorio, versión del launcher, país aproximado cuando Vercel lo proporciona, y fechas de primera/última actividad. La dirección IP no se guarda ni se envía como campo de telemetría. Los eventos de uso solo se guardan si `optional_consent` es `true`.
+### 📈 Estadísticas disponibles
+- 📥 Total de instalaciones.
+- 👥 Instalaciones activas hoy.
+- 🚀 Cantidad de inicios del launcher.
+- 🌍 Distribución aproximada por países.
+- 🏷️ Distribución de versiones del launcher.
+- 📊 Eventos y estadísticas de uso.
 
-La detección del país usa el encabezado de geolocalización de Vercel (`x-vercel-ip-country`). No se acepta un país enviado por el cliente.
+### 🔒 Privacidad
+La privacidad es importante para este proyecto.
 
-## 6. Límites de esta entrega
+- Se utilizan identificadores aleatorios de instalación.
+- No es necesario crear una cuenta personal para las estadísticas de instalación.
+- Los datos opcionales de uso se gestionan por separado.
+- La información del país es aproximada y se obtiene desde el servidor.
+- La IP no se incluye en el JSON de telemetría enviado por el cliente.
+- El acceso al dashboard está restringido.
 
-Esta API queda lista, pero el launcher de escritorio todavía debe apuntar a `https://fvrever-client-analytics.vercel.app/api/telemetry` para que empiecen a registrarse instalaciones. La integración del launcher se realiza aparte en el proyecto FVREVER Client.
+━━━━━━━━━━━━━━━━━━━━━━
 
-El dashboard muestra hasta 5.000 registros recientes por consulta. Los eventos visibles representan solo los eventos opcionales consentidos.
+## 🛠️・Tecnologías utilizadas
+
+FVREVER está construido utilizando diferentes tecnologías:
+
+- 🐍 **Python:** desarrollo del launcher y lógica del proyecto.
+- 🌐 **HTML, CSS y JavaScript:** interfaz del dashboard.
+- ▲ **Vercel:** alojamiento y despliegue de la API y el dashboard.
+- ⚡ **Supabase:** base de datos y almacenamiento de estadísticas.
+- 🐙 **GitHub:** control de versiones y alojamiento del código.
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+## 🏆・Créditos
+
+**Creador y desarrollador principal:**
+
+🌸 **areyoufancyhuh**
+
+Responsable de:
+-
