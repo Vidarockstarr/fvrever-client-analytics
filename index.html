@@ -238,6 +238,20 @@ nav button.active{background:linear-gradient(100deg,#e7a9ce2e,#d6a4d811);border-
 .modal{background:linear-gradient(145deg,#513b50,#302638);border-color:#c28dab}
 .modal p{color:#dfc8d9}
 
+
+.online-metric{--accent:#a8e6c1;--iconbg:#a8e6c122;--glow:#79d7a1}
+.online-metric .metric-icon{color:#a8e6c1}
+.online-live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#8ee3ad;box-shadow:0 0 10px #8ee3ad;vertical-align:middle;margin-right:4px;animation:onlinePulse 1.8s ease-in-out infinite}
+.online-panel{margin-top:15px}
+.online-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.online-panel-head h3{margin:0 0 5px}
+.online-panel-head .hint{margin:0}
+.online-version-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.online-version{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid #876a83;background:#49344988;border-radius:12px}
+.online-version-name{font-weight:700;color:#f7e5ef;overflow-wrap:anywhere}
+.online-version-count{font-size:19px;font-weight:800;color:#a8e6c1;font-variant-numeric:tabular-nums}
+@keyframes onlinePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.82)}}
+
 </style>
 </head>
 <body>
@@ -288,6 +302,11 @@ nav button.active{background:linear-gradient(100deg,#e7a9ce2e,#d6a4d811);border-
     <div class="card metric-cyan"><div class="metric-top"><span>Activos hoy</span><span class="metric-icon">◷</span></div><div class="metric" id="m-active">—</div><div class="metric-note">Instalaciones únicas hoy</div></div>
     <div class="card metric-purple"><div class="metric-top"><span>Inicios del launcher</span><span class="metric-icon">▷</span></div><div class="metric" id="m-launches">—</div><div class="metric-note">Veces que se abrió FVREVER</div></div>
     <div class="card metric-green"><div class="metric-top"><span>Licencias activas</span><span class="metric-icon">◇</span></div><div class="metric" id="m-licenses">0</div><div class="metric-note">Licencias vigentes</div></div>
+    <div class="card metric-green online-metric"><div class="metric-top"><span>Usuarios online ahora</span><span class="metric-icon">●</span></div><div class="metric" id="m-online">—</div><div class="metric-note"><span class="online-live-dot"></span> Heartbeat cada 15 s · expira a los 60 s</div></div>
+   </div>
+   <div class="panel online-panel">
+    <div class="online-panel-head"><div><h3>Presencia en tiempo real</h3><p class="hint">Launchers que han enviado una señal en los últimos 60 segundos</p></div><span class="zero-tag" id="onlineUpdated">ESPERANDO DATOS</span></div>
+    <div id="onlineVersions" class="online-version-list"><div class="empty">Cargando presencia…</div></div>
    </div>
    <div class="section-head"><div><h3>Un vistazo al refugio</h3><p>Datos anónimos enviados por FVREVER</p></div><span class="zero-tag" id="activityTag">ESPERANDO DATOS</span></div>
    <div class="content-grid">
@@ -332,8 +351,21 @@ function showToast(message){
  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add("hidden"),3600);
 }
 async function api(path,options={}){const response=await fetch(path,{credentials:"same-origin",cache:"no-store",...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});let data={};try{data=await response.json()}catch{}if(!response.ok)throw new Error(data.error||"Error de conexión");return data}
-function enterApp(){$("login").classList.add("hidden");$("app").classList.remove("hidden");$("loginPassword").value="";$("loginError").textContent="";loadDashboard()}
-function logout(){api("/api/auth",{method:"DELETE"}).catch(()=>{});$("app").classList.add("hidden");$("login").classList.remove("hidden");$("loginPassword").value="";$("loginPassword").focus()}
+let dashboardTimer=null;
+let dashboardLoading=false;
+function enterApp(){
+ $("login").classList.add("hidden");$("app").classList.remove("hidden");
+ $("loginPassword").value="";$("loginError").textContent="";
+ if(dashboardTimer)clearInterval(dashboardTimer);
+ loadDashboard();
+ dashboardTimer=setInterval(loadDashboard,15000);
+}
+function logout(){
+ if(dashboardTimer){clearInterval(dashboardTimer);dashboardTimer=null}
+ api("/api/auth",{method:"DELETE"}).catch(()=>{});
+ $("app").classList.add("hidden");$("login").classList.remove("hidden");
+ $("loginPassword").value="";$("loginPassword").focus();
+}
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;btn.textContent="Verificando…";try{await api("/api/auth",{method:"POST",body:JSON.stringify({password:$("loginPassword").value})});enterApp()}catch(err){$("loginError").textContent=err.message}finally{btn.disabled=false;btn.textContent="Entrar al refugio"}});
 $("logoutBtn").addEventListener("click",logout);$("settingsLogout").addEventListener("click",logout);
 const pageNames={overview:"Resumen",analytics:"Actividad",installations:"Instalaciones",countries:"Países",versions:"Versiones",errors:"Errores",licenses:"Licencias",settings:"Ajustes"};
@@ -355,11 +387,28 @@ function renderCountries(countries){
 }
 function renderVersions(versions){const entries=Object.entries(versions||{}).sort((a,b)=>b[1]-a[1]);const total=entries.reduce((s,x)=>s+Number(x[1]||0),0);$("versionList").innerHTML=entries.length?entries.map(([k,v],i)=>`<div class="bar-row"><div>${esc(k)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(1,Number(v)/Math.max(total,1)*100)}%;background:${palette[i%palette.length]}"></div></div><div class="bar-count">${v}</div></div>`).join(""):'<div class="empty">Todavía no hay datos de versiones.</div>'}
 function installationRows(items,full=false){if(!items?.length)return `<tr><td colspan="${full?5:5}" style="text-align:center;padding:25px;color:#8290a8">No hay instalaciones registradas</td></tr>`;return items.map(x=>`<tr><td>${esc(String(x.installation_id||"").slice(0,8))}…</td><td>${esc(x.launcher_version||"—")}</td>${full?`<td>${flag(x.country)} ${esc(countryLabel(x.country))}</td><td>${esc(fmt(x.first_seen))}</td>`:'<td>—</td>'}<td>${esc(fmt(x.last_seen))}</td>${full?"":'<td><span class="zero-tag">REGISTRADO</span></td>'}</tr>`).join("")}
-async function loadDashboard(){try{const d=await api("/api/dashboard");$("m-installations").textContent=d.total_installations??0;$("m-active").textContent=d.active_today??0;$("m-launches").textContent=d.total_launches??0;$("m-licenses").textContent=d.active_licenses??0;$("a-launches").textContent=d.total_launches??0;$("a-users").textContent=d.active_today??0;$("eventSummary").textContent=`${d.total_launches??0} inicios del launcher registrados`;
+function renderOnlineVersions(versions){
+ const entries=Object.entries(versions||{}).map(([version,count])=>[version,Number(count)||0]).filter(([,count])=>count>0).sort((a,b)=>b[1]-a[1]);
+ const root=$("onlineVersions");
+ if(!entries.length){root.innerHTML='<div class="empty">No hay launchers online en este momento 🌙</div>';return}
+ root.innerHTML=entries.map(([version,count])=>`<div class="online-version"><span class="online-version-name">FVREVER ${esc(version)}</span><strong class="online-version-count">${count}</strong></div>`).join("");
+}
+async function loadDashboard(){
+ if(dashboardLoading||$("app").classList.contains("hidden"))return;
+ dashboardLoading=true;
+ try{
+ const d=await api("/api/dashboard");
+ $("m-installations").textContent=d.total_installations??0;$("m-active").textContent=d.active_today??0;$("m-launches").textContent=d.total_launches??0;$("m-licenses").textContent=d.active_licenses??0;$("a-launches").textContent=d.total_launches??0;$("a-users").textContent=d.active_today??0;$("eventSummary").textContent=`${d.total_launches??0} inicios del launcher registrados`;
 const installs=Array.isArray(d.installations)?d.installations:[];$("recentRows").innerHTML=installationRows(installs.slice(0,12));$("allRows").innerHTML=installationRows(installs,true);
 renderCountries(d.countries||{});renderVersions(d.versions||{});
-$("apiDescription").textContent="Conectada a Vercel y Supabase";$("apiStatus").textContent="ONLINE";$("apiStatus").style.color="#efb7d5";
-}catch(err){console.error(err);$("apiDescription").textContent=err.message;$("apiStatus").textContent="OFFLINE";$("apiStatus").style.color="#ff9ca7";$("apiStatus").style.borderColor="#75404b";$("apiStatus").style.background="#3a1d2a";$("apiStatus").style.color="#ff9ca7";$("m-installations").textContent="—";$("m-active").textContent="—";$("m-launches").textContent="—"}}
+ const onlineCount=Number(d.online_now??0);
+ $("m-online").textContent=onlineCount;
+ renderOnlineVersions(d.online_versions||{});
+ $("onlineUpdated").textContent="ACTUALIZADO "+new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+ $("apiDescription").textContent="Conectada a Vercel y Supabase";$("apiStatus").textContent="ONLINE";$("apiStatus").style.color="#efb7d5";
+}catch(err){console.error(err);$("apiDescription").textContent=err.message;$("apiStatus").textContent="OFFLINE";$("apiStatus").style.color="#ff9ca7";$("apiStatus").style.borderColor="#75404b";$("apiStatus").style.background="#3a1d2a";$("apiStatus").style.color="#ff9ca7";$("m-installations").textContent="—";$("m-active").textContent="—";$("m-launches").textContent="—";$("m-online").textContent="—";$("onlineVersions").innerHTML='<div class="empty">No se pudo actualizar la presencia.</div>'}
+ finally{dashboardLoading=false}
+}
 $("resetStatsBtn")?.addEventListener("click",()=> $("resetModal").classList.remove("hidden"));
 $("cancelResetBtn")?.addEventListener("click",()=> $("resetModal").classList.add("hidden"));
 $("resetModal")?.addEventListener("click",e=>{if(e.target===$("resetModal"))$("resetModal").classList.add("hidden")});
