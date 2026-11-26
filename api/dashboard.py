@@ -3,7 +3,7 @@ import json
 import urllib.request
 import urllib.error
 from http.server import BaseHTTPRequestHandler
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from api.auth import _valid
 
 
@@ -53,11 +53,42 @@ class handler(BaseHTTPRequestHandler):
             state_data, _ = _supabase(
                 "dashboard_stats_state?select=stats_reset_at&id=eq.true&limit=1"
             )
+            online_data, _ = _supabase(
+                "online_sessions?select=installation_id,launcher_version,last_heartbeat,is_online"
+                "&order=last_heartbeat.desc&limit=5000"
+            )
 
             rows = json.loads(installations_data or b"[]")
             events = json.loads(events_data or b"[]")
             state = json.loads(state_data or b"[]")
+            online_rows = json.loads(online_data or b"[]")
             reset_at = state[0].get("stats_reset_at") if state else None
+
+            # A launcher sends a heartbeat every 5 seconds. Keep a small
+            # tolerance for network jitter; stale/crashed clients become offline.
+            now_utc = datetime.now(timezone.utc)
+            online_sessions = []
+            online_now = 0
+            for session in online_rows:
+                last_heartbeat = session.get("last_heartbeat") or ""
+                try:
+                    heartbeat_at = datetime.fromisoformat(
+                        last_heartbeat.replace("Z", "+00:00")
+                    )
+                    if heartbeat_at.tzinfo is None:
+                        heartbeat_at = heartbeat_at.replace(tzinfo=timezone.utc)
+                    fresh = timedelta(0) <= now_utc - heartbeat_at <= timedelta(seconds=12)
+                except (TypeError, ValueError):
+                    fresh = False
+
+                is_online = bool(session.get("is_online")) and fresh
+                online_now += int(is_online)
+                online_sessions.append({
+                    "installation_id": session.get("installation_id"),
+                    "launcher_version": session.get("launcher_version"),
+                    "last_heartbeat": last_heartbeat,
+                    "is_online": is_online,
+                })
 
             versions, countries = {}, {}
             for row in rows:
@@ -96,6 +127,8 @@ class handler(BaseHTTPRequestHandler):
                 "total_installations": total_installations,
                 "active_today": active_today,
                 "total_launches": total_launches,
+                "online_now": online_now,
+                "online_sessions": online_sessions,
                 "installations": rows,
                 "versions": versions,
                 "countries": countries,
