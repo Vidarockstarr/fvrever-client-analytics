@@ -1,9 +1,14 @@
-import os
+# -*- coding: utf-8 -*-
 import json
-import urllib.request
+import logging
+import os
 import urllib.error
+import urllib.request
 from http.server import BaseHTTPRequestHandler
+
 from api.auth import _valid
+
+logger = logging.getLogger(__name__)
 
 
 def _json(handler, status, obj):
@@ -19,6 +24,7 @@ def _json(handler, status, obj):
 def _reset_in_supabase():
     base = os.environ["SUPABASE_URL"].rstrip("/")
     key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+
     request = urllib.request.Request(
         base + "/rest/v1/rpc/reset_fvrever_dashboard_stats",
         data=b"{}",
@@ -27,12 +33,18 @@ def _reset_in_supabase():
             "apikey": key,
             "Authorization": "Bearer " + key,
             "Content-Type": "application/json",
-            "Prefer": "return=representation",
+            "Accept": "application/json",
         },
     )
+
     with urllib.request.urlopen(request, timeout=20) as response:
         raw = response.read()
-        return json.loads(raw) if raw else None
+        if not raw:
+            return None
+        try:
+            return json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return raw.decode("utf-8", errors="replace")
 
 
 class handler(BaseHTTPRequestHandler):
@@ -41,34 +53,59 @@ class handler(BaseHTTPRequestHandler):
             _json(self, 401, {"error": "No autorizado"})
             return
 
-        if not os.environ.get("SUPABASE_URL") or not os.environ.get("SUPABASE_SERVICE_ROLE_KEY"):
+        if not os.environ.get("SUPABASE_URL") or not os.environ.get(
+            "SUPABASE_SERVICE_ROLE_KEY"
+        ):
             _json(self, 503, {"error": "Backend no configurado"})
             return
 
         try:
             length = int(self.headers.get("Content-Length", "0"))
-            if length > 1024:
-                _json(self, 400, {"error": "Solicitud demasiado grande"})
+            if length < 0 or length > 1024:
+                _json(self, 400, {"error": "Solicitud no válida"})
                 return
-            payload = json.loads(self.rfile.read(length) or b"{}")
-            if payload.get("confirm") is not True:
+
+            raw_payload = self.rfile.read(length) if length else b"{}"
+            payload = json.loads(raw_payload or b"{}")
+
+            if not isinstance(payload, dict) or payload.get("confirm") is not True:
                 _json(self, 400, {"error": "Debes confirmar el reinicio"})
                 return
 
             reset_at = _reset_in_supabase()
+
             _json(self, 200, {
                 "ok": True,
                 "message": "Estadísticas reiniciadas",
                 "stats_reset_at": reset_at,
                 "installations_preserved": True,
             })
+
         except urllib.error.HTTPError as error:
+            # El cuerpo de Supabase suele contener el motivo concreto
+            # (por ejemplo, permisos, función no encontrada o error SQL).
+            try:
+                detail = error.read().decode("utf-8", errors="replace")
+            except Exception:
+                detail = "(no se pudo leer el cuerpo de error)"
+
+            logger.error(
+                "Supabase RPC reset_fvrever_dashboard_stats respondió HTTP %s: %s",
+                error.code,
+                detail[:4000],
+            )
             _json(self, 502, {
-                "error": "No se pudieron reiniciar las estadísticas",
-                "status": error.code,
+                "error": "Supabase rechazó el reinicio",
+                "upstream_status": error.code,
             })
+
+        except urllib.error.URLError as error:
+            logger.exception("No se pudo conectar con Supabase: %s", error)
+            _json(self, 502, {"error": "No se pudo conectar con Supabase"})
+
         except Exception:
-            _json(self, 502, {"error": "No se pudieron reiniciar las estadísticas"})
+            logger.exception("Error inesperado en /api/reset_stats")
+            _json(self, 502, {"error": "Error interno al reiniciar estadísticas"})
 
     def do_GET(self):
         _json(self, 405, {"error": "Método no permitido"})
