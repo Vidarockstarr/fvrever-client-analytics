@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17251d">
+<title>FVREVER Actividad</title>
+<style>
+
+:root{
+ color-scheme:dark;
+ --bg:#111a17;--sidebar:#17231e;--panel:#1b2a23;--panel2:#24372c;
+ --line:#354b3d;--muted:#a4b7a6;--text:#f3f4df;--sage:#a8c69b;
+ --moss:#73966d;--mint:#c6dfb4;--gold:#e6c98d;--wood:#a77b54;
+ --danger:#d58c82;--shadow:0 18px 55px #07100c88;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;min-height:100vh;color:var(--text);
+ background:
+  radial-gradient(ellipse at 72% -8%,#536f4b55 0,transparent 38%),
+  radial-gradient(ellipse at 12% 40%,#314d3b33 0,transparent 34%),
+  linear-gradient(145deg,#101914,#14221b 58%,#101a16);
+ font:14px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;z-index:-1;
+ background-image:linear-gradient(#d5e7c008 1px,transparent 1px),linear-gradient(90deg,#d5e7c008 1px,transparent 1px);
+ background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+#login{min-height:100vh;display:grid;place-items:center;padding:24px;
+ background:radial-gradient(ellipse at 50% 12%,#78986a38,transparent 48%),transparent}
+.login-card{
+ width:min(440px,100%);border:1px solid #617b5a88;
+ background:linear-gradient(145deg,#24372cf2,#17251ff2);padding:38px;border-radius:25px;
+ box-shadow:var(--shadow);backdrop-filter:blur(18px);animation:rise .65s cubic-bezier(.2,.8,.2,1) both
+}
+.logo{width:49px;height:49px;border:1px solid #c7dcb266;
+ background:linear-gradient(145deg,#9bbd87,#527c57);border-radius:16px;
+ display:grid;place-items:center;font-weight:950;font-size:20px;margin-bottom:24px;
+ box-shadow:0 9px 25px #64885c44;color:#fff;text-shadow:0 2px 4px #253b25}
+h1{font-size:27px;letter-spacing:-.9px;margin:0 0 5px}
+.sub{color:var(--muted);margin:0 0 25px}
+label{display:block;color:#d5e1d0;font-size:12px;margin:14px 0 7px}
+input{width:100%;background:#111c16;border:1px solid #49604c;color:white;border-radius:12px;padding:13px;outline:none}
+input:focus{border-color:var(--sage);box-shadow:0 0 0 3px #a8c69b22}
+.btn{border:1px solid #a7c29a66;background:linear-gradient(115deg,#789b6b,#547d59);color:#fff;
+ padding:11px 16px;border-radius:12px;font-weight:800;box-shadow:0 7px 20px #587b4a2b;transition:transform .22s,filter .22s,box-shadow .22s}
+.btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 10px 24px #587b4a44}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.btn.secondary{background:#26382d;color:#dce9d7;border-color:#49634d;box-shadow:none}
+.btn.secondary:hover{background:#304735}
+.btn.danger{background:linear-gradient(115deg,#a95f58,#874a47);border-color:#d18b7e88}
+.btn.full{width:100%;margin-top:20px}
+.error{color:#ffaaa0;font-size:12px;min-height:18px;margin-top:10px}
+#app{min-height:100vh}
+.sidebar{position:fixed;inset:0 auto 0 0;width:254px;border-right:1px solid #405643;
+ padding:24px 17px;background:#15231ded;backdrop-filter:blur(20px);
+ display:flex;flex-direction:column;z-index:3;box-shadow:8px 0 30px #08110c22}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px 30px}
+.brand .logo{width:39px;height:39px;margin:0;border-radius:13px;font-size:16px}
+.brand strong{font-size:14px;letter-spacing:.2px}.brand small{display:block;color:#9bb29a;font-size:10px;margin-top:2px;letter-spacing:1.1px}
+.nav-label{color:#829a7f;font-size:10px;text-transform:uppercase;letter-spacing:1.7px;padding:12px 11px 9px;font-weight:850}
+nav{display:grid;gap:5px}
+nav button{background:transparent;border:1px solid transparent;color:#b0c1ae;text-align:left;padding:11px 12px;border-radius:12px;
+ display:flex;gap:12px;align-items:center;transition:.2s;font-weight:650}
+nav button:hover{background:#ffffff0b;color:white;transform:translateX(2px)}
+nav button.active{background:linear-gradient(100deg,#90b77a2e,#c7dba811);border-color:#a6c79844;color:#fff;box-shadow:inset 3px 0 #b6d49f}
+.ico{width:20px;height:20px;display:grid;place-items:center;color:#c1d8a9;font-size:16px}
+.side-bottom{margin-top:auto;border-top:1px solid #354b3d;padding:17px 8px 0;color:#9bb09b;font-size:11px;line-height:1.9}
+.side-bottom b{color:#d9e8d1}.online-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#9dcc85;box-shadow:0 0 11px #9dcc85;margin-right:7px}
+.main{margin-left:254px;padding:31px 38px;max-width:1780px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:27px}
+.eyebrow{color:#9caf9a;text-transform:uppercase;font-size:10px;letter-spacing:1.8px;font-weight:800}
+.top h2{margin:5px 0 0;font-size:28px;letter-spacing:-.9px}
+.top-actions{display:flex;gap:10px;align-items:center}
+.status{border:1px solid #557b55;background:#29433199;border-radius:30px;padding:8px 12px;color:#c3e2ae;font-size:11px;font-weight:750}
+.status:before{content:"";display:inline-block;width:7px;height:7px;background:#a8d58e;border-radius:50%;margin:0 8px 1px 0;box-shadow:0 0 9px #a8d58e}
+.page{display:none}.page.active{display:block;animation:pageIn .42s cubic-bezier(.2,.75,.2,1)}
+@keyframes pageIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes twinkle{0%,100%{opacity:.35}50%{opacity:.9}}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.card,.panel{border:1px solid #3b5543;background:linear-gradient(145deg,#23352aee,#1a2921ee);
+ border-radius:18px;padding:19px;box-shadow:0 9px 28px #07100c35;backdrop-filter:blur(12px)}
+.card{position:relative;overflow:hidden;min-height:143px;transition:transform .25s,border-color .25s,box-shadow .25s}
+.card:hover{transform:translateY(-4px);border-color:#77966e;box-shadow:0 15px 32px #07100c55}
+.card:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;right:-44px;top:-49px;
+ background:var(--glow,#9dbd84);filter:blur(46px);opacity:.2;pointer-events:none}
+.metric-top{display:flex;justify-content:space-between;align-items:center;color:#c1d0bd;font-size:12px;font-weight:700;position:relative;z-index:1}
+.metric-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--iconbg,#9dbd8422);color:var(--accent,#c2dcae);font-size:16px}
+.metric{font-size:33px;font-weight:850;letter-spacing:-1.3px;margin:13px 0 0;position:relative;z-index:1;font-variant-numeric:tabular-nums}
+.metric-note{font-size:11px;color:#9caf9a;position:relative;z-index:1}
+.metric-blue{--accent:#c1d9a6;--iconbg:#9dbd8422;--glow:#91b87c}
+.metric-cyan{--accent:#b6d9c4;--iconbg:#8fc5a222;--glow:#83b99b}
+.metric-purple{--accent:#d6c5a0;--iconbg:#c9ad7622;--glow:#c7a46d}
+.metric-green{--accent:#b7d9a3;--iconbg:#92bd7c22;--glow:#91c27a}
+.metric-orange{--accent:#e2b69a;--iconbg:#d18d6c22;--glow:#ce8c6b}
+.welcome{
+ position:relative;overflow:hidden;margin-bottom:18px;padding:25px 27px;border:1px solid #6d8b5e88;border-radius:21px;
+ background:linear-gradient(110deg,#344d36ee 0%,#263d2eee 48%,#344532dd 100%);
+ box-shadow:0 15px 38px #07100c55
+}
+.welcome:before{content:"";position:absolute;inset:0;opacity:.16;pointer-events:none;
+ background:repeating-linear-gradient(135deg,transparent 0 22px,#d9e8c6 23px 24px,transparent 25px 47px)}
+.welcome:after{content:"✦   ·     ✧       ·";position:absolute;right:25px;top:16px;color:#d7e8bd88;font-size:22px;letter-spacing:15px;animation:twinkle 4s ease-in-out infinite}
+.welcome-content{position:relative;z-index:1;max-width:700px}
+.welcome-kicker{color:#c7dcb3;text-transform:uppercase;letter-spacing:2px;font-size:10px;font-weight:850}
+.welcome h3{font-size:24px;line-height:1.2;letter-spacing:-.6px;margin:7px 0}
+.welcome p{color:#d2dfc9;margin:0;font-size:12px;max-width:570px}
+.welcome-leaves{position:absolute;right:8%;bottom:-17px;font-size:76px;opacity:.22;filter:saturate(.65);animation:drift 6s ease-in-out infinite}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:28px 0 14px}
+.section-head h3{font-size:15px;margin:0;font-weight:800}.section-head p{color:#9caf9a;margin:3px 0 0;font-size:12px}
+.content-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:15px}
+.panel h3{font-size:13px;margin:0;font-weight:800}.panel .hint{color:#9caf9a;font-size:11px;margin:4px 0 17px}
+.chart-area{height:210px;position:relative}.chart-area svg{width:100%;height:100%;overflow:visible}
+.chart-grid{stroke:#49604c;stroke-width:1;stroke-dasharray:4 5}.chart-line{fill:none;stroke:#b3d09a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chart-fill{fill:url(#areaGradient);opacity:.23}.chart-point{fill:#d0e4b6;stroke:#23352a;stroke-width:3}
+.chart-empty{height:190px;display:grid;place-items:center;text-align:center;color:#9caf9a;font-size:12px;
+ border:1px dashed #52694f;border-radius:14px;padding:20px;background:#ffffff04}
+.chart-empty b{display:block;color:#e2ecd9;font-size:13px;margin-bottom:5px}
+.donut-layout{display:flex;align-items:center;gap:22px;min-height:190px}
+.donut{width:155px;height:155px;border-radius:50%;background:conic-gradient(#9dbd84 0 100%);position:relative;flex:none;filter:drop-shadow(0 5px 12px #0004)}
+.donut:after{content:"";position:absolute;inset:23px;background:#203128;border-radius:50%}
+.donut-center{position:absolute;inset:0;z-index:1;display:grid;place-content:center;text-align:center}
+.donut-center strong{font-size:25px}.donut-center span{font-size:10px;color:#9caf9a}
+.legend{display:grid;gap:11px;min-width:0;flex:1}.legend-row{display:flex;align-items:center;justify-content:space-between;gap:9px;font-size:11px;color:#d1dfca}
+.legend-name{display:flex;align-items:center;gap:8px;min-width:0}.legend-name span:last-child{overflow:hidden;text-overflow:ellipsis}
+.swatch{width:8px;height:8px;border-radius:3px;flex:none}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;white-space:nowrap}
+.table th{text-align:left;color:#9caf9a;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:850;padding:12px 11px;border-bottom:1px solid #405643}
+.table td{padding:14px 11px;border-bottom:1px solid #354b3d;color:#d0ddcb;font-size:12px}
+.table tr:last-child td{border-bottom:0}.table tbody tr{transition:background .18s}.table tbody tr:hover{background:#ffffff08}
+.zero-tag{border:1px solid #536b50;background:#2a3d30;border-radius:8px;padding:4px 8px;color:#c9ddb9;font-size:10px;font-weight:800}
+.country-flag{font-size:19px;vertical-align:middle;margin-right:9px}.country-code{color:#9caf9a;font-size:10px;margin-left:6px}
+.bar-list{display:grid;gap:15px}.bar-row{display:grid;grid-template-columns:minmax(100px,145px) 1fr 35px;gap:12px;align-items:center;font-size:11px;color:#d1dfca}
+.bar-track{height:9px;background:#354a3a;border-radius:20px;overflow:hidden}.bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#8eae78,#d0c18b);min-width:2px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.bar-count{text-align:right;color:#b1c4aa;font-variant-numeric:tabular-nums}
+.empty{min-height:150px;display:grid;place-items:center;text-align:center;color:#9caf9a;font-size:12px;padding:20px}
+.empty b{display:block;color:#e2ecd9;font-size:13px;margin-bottom:5px}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:15px 0;border-bottom:1px solid #3b5140}
+.setting-row:last-child{border:0}.setting-row strong{font-size:12px}.setting-row p{margin:3px 0 0;color:#a4b7a6;font-size:11px}
+.reset-panel{margin-top:15px;border-color:#80594e;background:linear-gradient(145deg,#352c25,#252a22)}
+.reset-panel .hint{max-width:760px}
+.reset-warning{display:flex;align-items:center;gap:10px;color:#e6c6a8;font-size:11px;margin:13px 0}
+.reset-actions{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.toast{position:fixed;bottom:22px;right:22px;background:#dcebd1;color:#1c2c1d;padding:12px 16px;border-radius:12px;font-size:12px;font-weight:800;z-index:30;box-shadow:var(--shadow);animation:rise .25s ease}
+.modal-backdrop{position:fixed;inset:0;background:#07100ccc;backdrop-filter:blur(9px);display:grid;place-items:center;padding:20px;z-index:40;animation:pageIn .2s ease}
+.modal{width:min(460px,100%);background:linear-gradient(145deg,#293d30,#1b2a21);border:1px solid #708d60;border-radius:20px;padding:25px;box-shadow:0 25px 80px #0009}
+.modal h3{font-size:18px;margin:0 0 8px}.modal p{color:#bdcdb8;font-size:12px;margin:0 0 18px}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.content-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .sidebar{position:static;width:auto;height:auto;padding:13px 14px;border-right:0;border-bottom:1px solid var(--line)}
+ .brand{padding:0 5px 12px}.nav-label,.side-bottom{display:none}
+ nav{display:flex;overflow:auto;padding-bottom:2px}nav button{white-space:nowrap;padding:9px 11px}
+ .main{margin:0;padding:23px 15px}.top{align-items:flex-start;flex-direction:column}
+ .top-actions{width:100%;justify-content:space-between}.settings-grid{grid-template-columns:1fr}
+ .donut-layout{flex-wrap:wrap}.donut{width:130px;height:130px}.legend{min-width:150px}
+}
+@media(max-width:440px){
+ .cards{grid-template-columns:1fr 1fr;gap:9px}.card{padding:14px;min-height:130px}
+ .metric{font-size:26px}.metric-top{font-size:11px}.main{padding-inline:12px}.top h2{font-size:24px}
+ .welcome{padding:20px}.welcome h3{font-size:21px}.welcome-leaves{right:1%;font-size:54px}
+ .reset-actions{align-items:flex-start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+</style>
+</head>
+<body>
+<section id="login">
+ <div class="login-card">
+  <div class="logo">F.</div><h1>FVREVER Actividad</h1><p class="sub">Tu pequeño refugio de estadísticas · Acceso privado.</p>
+  <form id="loginForm"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" required autofocus><button class="btn full" type="submit">Entrar al refugio</button><div class="error" id="loginError" role="alert"></div></form>
+ </div>
+</section>
+<div id="app" class="hidden">
+ <aside class="sidebar">
+  <div class="brand"><div class="logo">F.</div><div><strong>FVREVER Actividad</strong><small>REFUGIO DE ESTADÍSTICAS</small></div></div>
+  <div class="nav-label">Espacio</div>
+  <nav id="nav">
+   <button class="active" data-page="overview"><span class="ico">▦</span>Resumen</button>
+   <button data-page="analytics"><span class="ico">▥</span>Actividad</button>
+   <button data-page="installations"><span class="ico">⌘</span>Instalaciones</button>
+   <button data-page="countries"><span class="ico">◎</span>Países</button>
+   <button data-page="versions"><span class="ico">◇</span>Versiones</button>
+   <button data-page="errors"><span class="ico">△</span>Errores</button>
+   <button data-page="licenses"><span class="ico">▤</span>Licencias</button>
+  </nav>
+  <div class="nav-label">Sistema</div><nav><button data-page="settings"><span class="ico">⚙</span>Ajustes</button></nav>
+  <div class="side-bottom"><span class="online-dot"></span><b>Todo tranquilo por aquí</b><br>FVREVER · ACCESO PRIVADO</div>
+ </aside>
+ <main class="main">
+  <header class="top"><div><div class="eyebrow">Espacio / <span id="crumb">Resumen</span></div><h2 id="pageTitle">Resumen</h2></div><div class="top-actions"><span class="status">Sistema conectado</span><button class="btn secondary" id="logoutBtn">Salir</button></div></header>
+  <section class="page active" id="page-overview">
+   <div class="welcome">
+    <div class="welcome-content">
+     <div class="welcome-kicker">☼ Un rincón tranquilo de FVREVER</div>
+     <h3>Bienvenido de vuelta, administrador.</h3>
+     <p>Todo tu pequeño mundo de instalaciones, versiones y actividad en un solo lugar. Ponte cómodo y revisa cómo crece la comunidad.</p>
+    </div>
+    <div class="welcome-leaves" aria-hidden="true">🌿</div>
+   </div>
+   <div class="cards">
+    <div class="card metric-blue"><div class="metric-top"><span>Instalaciones totales</span><span class="metric-icon">↗</span></div><div class="metric" id="m-installations">—</div><div class="metric-note">Instalaciones registradas · permanente</div></div>
+    <div class="card metric-cyan"><div class="metric-top"><span>Activos hoy</span><span class="metric-icon">◷</span></div><div class="metric" id="m-active">—</div><div class="metric-note">Instalaciones únicas hoy</div></div>
+    <div class="card metric-purple"><div class="metric-top"><span>Inicios del launcher</span><span class="metric-icon">▷</span></div><div class="metric" id="m-launches">—</div><div class="metric-note">Veces que se abrió FVREVER</div></div>
+    <div class="card metric-green"><div class="metric-top"><span>Licencias activas</span><span class="metric-icon">◇</span></div><div class="metric" id="m-licenses">0</div><div class="metric-note">Licencias vigentes</div></div>
+   </div>
+   <div class="section-head"><div><h3>Un vistazo al refugio</h3><p>Datos anónimos enviados por FVREVER</p></div><span class="zero-tag" id="activityTag">ESPERANDO DATOS</span></div>
+   <div class="content-grid">
+    <div class="panel"><h3>Actividad de inicios</h3><p class="hint">Inicios diarios del launcher</p><div class="chart-empty"><div><b>Aún no hay historial diario</b>La API registra el total acumulado. El historial por día todavía no está disponible.</div></div></div>
+    <div class="panel"><h3>Instalaciones por país</h3><p class="hint">Distribución aproximada por país</p><div id="countryChart" class="donut-layout"><div class="empty">Cargando datos de países…</div></div></div>
+   </div>
+   <div class="section-head"><div><h3>Llegadas recientes</h3><p>Últimos launchers registrados</p></div></div>
+   <div class="panel table-wrap"><table class="table"><thead><tr><th>Instalación</th><th>Launcher</th><th>Minecraft</th><th>Última actividad</th><th>Estado</th></tr></thead><tbody id="recentRows"><tr><td colspan="5" style="text-align:center">Cargando instalaciones…</td></tr></tbody></table></div>
+  </section>
+  <section class="page" id="page-analytics">
+   <div class="cards"><div class="card metric-purple"><div class="metric-top">Inicios del launcher</div><div class="metric" id="a-launches">—</div><div class="metric-note">Inicios registrados desde el último reinicio</div></div><div class="card metric-cyan"><div class="metric-top">Activos hoy</div><div class="metric" id="a-users">—</div><div class="metric-note">Instalaciones únicas hoy</div></div><div class="card metric-blue"><div class="metric-top">Sesiones</div><div class="metric">—</div><div class="metric-note">No disponible en la API actual</div></div><div class="card metric-green"><div class="metric-top">Duración media</div><div class="metric">—</div><div class="metric-note">No disponible en la API actual</div></div></div>
+   <div class="panel" style="margin-top:15px"><h3>Eventos de actividad</h3><p class="hint">Acciones opcionales compartidas con consentimiento</p><div class="empty"><div><b id="eventSummary">Cargando…</b>Solo se guardan eventos con consentimiento. No se almacena una línea de tiempo detallada.</div></div></div>
+  </section>
+  <section class="page" id="page-installations"><div class="panel"><h3>Instalaciones</h3><p class="hint">Instalaciones registradas</p><div class="table-wrap"><table class="table"><thead><tr><th>Instalación</th><th>Versión del launcher</th><th>País</th><th>Primer registro</th><th>Última actividad</th></tr></thead><tbody id="allRows"></tbody></table></div></div></section>
+  <section class="page" id="page-countries"><div class="content-grid"><div class="panel"><h3>Países</h3><p class="hint">Distribución aproximada por país</p><div id="countryList" class="bar-list"></div></div><div class="panel"><h3>Resumen geográfico</h3><p class="hint">Instalaciones registradas por país</p><div id="countrySummary" class="empty">Cargando…</div></div></div></section>
+  <section class="page" id="page-versions"><div class="panel"><h3>Versiones del launcher</h3><p class="hint">Distribución de instalaciones registradas</p><div id="versionList" class="bar-list"></div></div></section>
+  <section class="page" id="page-errors"><div class="panel"><h3>Errores y cierres</h3><p class="hint">Diagnósticos compartidos voluntariamente</p><div class="empty"><div><b>No hay un registro de errores conectado</b>La telemetría actual no envía informes de fallos.</div></div></div></section>
+  <section class="page" id="page-licenses"><div class="cards"><div class="card metric-blue"><div class="metric-top">Licencias totales</div><div class="metric">0</div></div><div class="card metric-green"><div class="metric-top">Activas</div><div class="metric">0</div></div><div class="card metric-orange"><div class="metric-top">Revocadas</div><div class="metric">0</div></div><div class="card metric-purple"><div class="metric-top">Activaciones</div><div class="metric">0</div></div></div><div class="panel" style="margin-top:15px"><h3>Administración de licencias</h3><div class="empty"><div><b>Todavía no hay licencias</b>Administración de licencias requires a dedicated secure backend.</div></div></div></section>
+  <section class="page" id="page-settings"><div class="settings-grid">
+   <div class="panel"><h3>Seguridad</h3><p class="hint">Acceso al panel</p><div class="setting-row"><div><strong>Cambiar contraseña</strong><p>La contraseña se configura desde las variables de entorno de Vercel.</p></div><span class="zero-tag">VERCEL ENV</span></div><div class="setting-row"><div><strong>Sesión</strong><p>Cerrar esta sesión del navegador.</p></div><button class="btn secondary" id="settingsLogout">Salir</button></div></div>
+   <div class="panel"><h3>Telemetría</h3><p class="hint">Estado de conexión</p><div class="setting-row"><div><strong>Actividad API</strong><p id="apiDescription">Comprobando conexión…</p></div><span class="zero-tag" id="apiStatus">COMPROBANDO</span></div><div class="setting-row"><div><strong>Datos permanentes</strong><p>ID anónimo de instalación, país aproximado y versión del launcher.</p></div><span class="zero-tag">ACTIVO</span></div></div>
+  </div>
+  <div class="panel reset-panel">
+   <h3>Reiniciar estadísticas de actividad</h3>
+   <p class="hint">Limpia los contadores de inicios del launcher, usuarios activos de hoy y eventos opcionales. Las instalaciones registradas, sus IDs anónimos, países, versiones y fecha de primer registro se conservan intactos.</p>
+   <div class="reset-warning"><span>⚠</span><span>Esta acción no se puede deshacer. Los launchers ya registrados no se eliminan ni se descuentan.</span></div>
+   <div class="reset-actions">
+    <div><strong>Se conservarán todas las instalaciones</strong><p class="hint" style="margin:3px 0 0">El total de instalaciones seguirá siendo el número histórico real.</p></div>
+    <button class="btn danger" id="resetStatsBtn" type="button">↻ Reiniciar estadísticas</button>
+   </div>
+  </div>
+  <div class="panel" style="margin-top:15px"><h3>Acerca del panel</h3><p class="hint">FVREVER Analytics · Panel privado · Conectado a Vercel y Supabase. Los eventos opcionales requieren consentimiento.</p></div></section>
+ </main>
+</div>
+<div id="resetModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+ <div class="modal">
+  <h3 id="resetModalTitle">¿Reiniciar las estadísticas?</h3>
+  <p>Se pondrán a cero los inicios contabilizados, los activos de hoy y los eventos opcionales. El total de instalaciones y todos los registros permanentes se conservarán.</p>
+  <div class="modal-actions">
+   <button class="btn secondary" id="cancelResetBtn" type="button">Cancelar</button>
+   <button class="btn danger" id="confirmResetBtn" type="button">Sí, reiniciar</button>
+  </div>
+ </div>
+<div id="toast" class="toast hidden" role="status"></div>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+let toastTimer=null;
+function showToast(message){
+ const el=$("toast");el.textContent=message;el.classList.remove("hidden");
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add("hidden"),3600);
+}
+async function api(path,options={}){const response=await fetch(path,{credentials:"same-origin",cache:"no-store",...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});let data={};try{data=await response.json()}catch{}if(!response.ok)throw new Error(data.error||"Error de conexión");return data}
+function enterApp(){$("login").classList.add("hidden");$("app").classList.remove("hidden");$("loginPassword").value="";$("loginError").textContent="";loadDashboard()}
+function logout(){api("/api/auth",{method:"DELETE"}).catch(()=>{});$("app").classList.add("hidden");$("login").classList.remove("hidden");$("loginPassword").value="";$("loginPassword").focus()}
+$("loginForm").addEventListener("submit",async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;btn.textContent="Verificando…";try{await api("/api/auth",{method:"POST",body:JSON.stringify({password:$("loginPassword").value})});enterApp()}catch(err){$("loginError").textContent=err.message}finally{btn.disabled=false;btn.textContent="Entrar al refugio"}});
+$("logoutBtn").addEventListener("click",logout);$("settingsLogout").addEventListener("click",logout);
+const pageNames={overview:"Resumen",analytics:"Actividad",installations:"Instalaciones",countries:"Países",versions:"Versiones",errors:"Errores",licenses:"Licencias",settings:"Ajustes"};
+document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b===btn));document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+btn.dataset.page));$("pageTitle").textContent=pageNames[btn.dataset.page];$("crumb").textContent=pageNames[btn.dataset.page]}));
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fmt(s){if(!s)return"—";try{return new Date(s).toLocaleString("es")}catch{return s}}
+const countryNames={SV:"El Salvador",US:"Estados Unidos",MX:"México",GT:"Guatemala",HN:"Honduras",NI:"Nicaragua",CR:"Costa Rica",PA:"Panamá",BZ:"Belice",CA:"Canadá",BR:"Brasil",AR:"Argentina",CL:"Chile",CO:"Colombia",PE:"Perú",EC:"Ecuador",VE:"Venezuela",ES:"España",FR:"Francia",DE:"Alemania",IT:"Italia",GB:"Reino Unido",PT:"Portugal",RU:"Rusia",JP:"Japón",KR:"Corea del Sur",CN:"China",IN:"India",AU:"Australia",NL:"Países Bajos",SE:"Suecia",NO:"Noruega",PL:"Polonia",TR:"Turquía",UA:"Ucrania"};
+function flag(code){if(!/^[A-Z]{2}$/.test(code||""))return"🌐";return String.fromCodePoint(...code.toUpperCase().split("").map(c=>127397+c.charCodeAt(0)))}
+function countryLabel(code){return countryNames[code]||code||"Desconocido"}
+const palette=["#718cff","#42d6e8","#ad83ff","#39d99a","#ffb86b","#ff78b7","#f5d76e","#65a9ff"];
+function renderCountries(countries){
+ const entries=Object.entries(countries||{}).sort((a,b)=>b[1]-a[1]);const total=entries.reduce((s,x)=>s+Number(x[1]||0),0);
+ const chart=$("countryChart");
+ if(!entries.length||!total){chart.innerHTML='<div class="empty"><div><b>Todavía no hay datos de países</b>Los países aparecerán aquí cuando estén disponibles.</div></div>';$("countryList").innerHTML='<div class="empty">Todavía no hay datos geográficos.</div>';$("countrySummary").innerHTML='<div><b>0 países</b>Todavía no se ha recibido información de países.</div>';return}
+ let cursor=0;const segments=entries.map((e,i)=>{const start=cursor;cursor+=Number(e[1])/total*100;return `${palette[i%palette.length]} ${start}% ${cursor}%`}).join(",");
+ chart.innerHTML=`<div class="donut" style="background:conic-gradient(${segments})"><div class="donut-center"><strong>${total}</strong><span>INSTALACIONES</span></div></div><div class="legend">${entries.slice(0,6).map(([k,v],i)=>`<div class="legend-row"><div class="legend-name"><i class="swatch" style="background:${palette[i%palette.length]}"></i><span>${flag(k)} ${esc(countryLabel(k))}</span></div><b>${v}</b></div>`).join("")}</div>`;
+ $("countryList").innerHTML=entries.map(([k,v],i)=>`<div class="bar-row"><div>${flag(k)} ${esc(countryLabel(k))}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(1,Number(v)/total*100)}%;background:${palette[i%palette.length]}"></div></div><div class="bar-count">${v}</div></div>`).join("");
+ $("countrySummary").innerHTML=`<div><b>${entries.length} ${entries.length===1?"país":"países"}</b>${total} instalaciones registradas<br><span style="color:#8c9ab2">${entries.map(([k,v])=>`${flag(k)} ${esc(countryLabel(k))} (${v})`).join(" · ")}</span></div>`;
+}
+function renderVersions(versions){const entries=Object.entries(versions||{}).sort((a,b)=>b[1]-a[1]);const total=entries.reduce((s,x)=>s+Number(x[1]||0),0);$("versionList").innerHTML=entries.length?entries.map(([k,v],i)=>`<div class="bar-row"><div>${esc(k)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(1,Number(v)/Math.max(total,1)*100)}%;background:${palette[i%palette.length]}"></div></div><div class="bar-count">${v}</div></div>`).join(""):'<div class="empty">Todavía no hay datos de versiones.</div>'}
+function installationRows(items,full=false){if(!items?.length)return `<tr><td colspan="${full?5:5}" style="text-align:center;padding:25px;color:#8290a8">No hay instalaciones registradas</td></tr>`;return items.map(x=>`<tr><td>${esc(String(x.installation_id||"").slice(0,8))}…</td><td>${esc(x.launcher_version||"—")}</td>${full?`<td>${flag(x.country)} ${esc(countryLabel(x.country))}</td><td>${esc(fmt(x.first_seen))}</td>`:'<td>—</td>'}<td>${esc(fmt(x.last_seen))}</td>${full?"":'<td><span class="zero-tag">REGISTRADO</span></td>'}</tr>`).join("")}
+async function loadDashboard(){try{const d=await api("/api/dashboard");$("m-installations").textContent=d.total_installations??0;$("m-active").textContent=d.active_today??0;$("m-launches").textContent=d.total_launches??0;$("m-licenses").textContent=d.active_licenses??0;$("a-launches").textContent=d.total_launches??0;$("a-users").textContent=d.active_today??0;$("eventSummary").textContent=`${d.total_launches??0} inicios del launcher registrados`;
+const installs=Array.isArray(d.installations)?d.installations:[];$("recentRows").innerHTML=installationRows(installs.slice(0,12));$("allRows").innerHTML=installationRows(installs,true);
+renderCountries(d.countries||{});renderVersions(d.versions||{});
+$("apiDescription").textContent="Conectada a Vercel y Supabase";$("apiStatus").textContent="ONLINE";$("apiStatus").style.color="#79e4b7";
+}catch(err){console.error(err);$("apiDescription").textContent=err.message;$("apiStatus").textContent="OFFLINE";$("apiStatus").style.color="#ff929b";$("apiStatus").style.borderColor="#75404b";$("apiStatus").style.background="#3a1d2a";$("apiStatus").style.color="#ff9ca7";$("m-installations").textContent="—";$("m-active").textContent="—";$("m-launches").textContent="—"}}
+$("resetStatsBtn")?.addEventListener("click",()=> $("resetModal").classList.remove("hidden"));
+$("cancelResetBtn")?.addEventListener("click",()=> $("resetModal").classList.add("hidden"));
+$("resetModal")?.addEventListener("click",e=>{if(e.target===$("resetModal"))$("resetModal").classList.add("hidden")});
+$("confirmResetBtn")?.addEventListener("click",async()=>{
+ const btn=$("confirmResetBtn");btn.disabled=true;btn.textContent="Reiniciando…";
+ try{
+  await api("/api/reset_stats",{method:"POST",body:JSON.stringify({confirm:true})});
+  $("resetModal").classList.add("hidden");
+  showToast("Estadísticas reiniciadas. Las instalaciones siguen intactas 🌿");
+  await loadDashboard();
+ }catch(err){showToast("No se pudo reiniciar: "+err.message)}
+ finally{btn.disabled=false;btn.textContent="Sí, reiniciar"}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("resetModal")?.classList.add("hidden")});
+api("/api/auth").then(()=>enterApp()).catch(()=>{});
+</script>
+</body>
+</html>
