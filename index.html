@@ -93,10 +93,10 @@ nav{display:grid;gap:4px}nav button{background:transparent;border:0;color:#999;t
   </section>
   <section class="page" id="page-settings">
    <div class="settings-grid">
-    <div class="panel"><h3>Security</h3><p class="hint">Local dashboard access</p><div class="setting-row"><div><strong>Change password</strong><p>Requires the recovery password.</p></div><button class="btn secondary" id="changePassBtn">Change</button></div><div class="setting-row"><div><strong>Session</strong><p>End this browser session.</p></div><button class="btn secondary" id="settingsLogout">Log out</button></div></div>
-    <div class="panel"><h3>Telemetry</h3><p class="hint">Data collection status</p><div class="setting-row"><div><strong>Analytics API</strong><p>Not connected</p></div><span class="zero-tag">OFFLINE</span></div><div class="setting-row"><div><strong>Data collection</strong><p>No user data is currently collected by this page.</p></div><span class="zero-tag">DISABLED</span></div></div>
+    <div class="panel"><h3>Security</h3><p class="hint">Server dashboard access</p><div class="setting-row"><div><strong>Change password</strong><p>La contraseña se configura en las variables de entorno de Vercel.</p></div><span class="zero-tag">VERCEL ENV</span></div><div class="setting-row"><div><strong>Session</strong><p>End this browser session.</p></div><button class="btn secondary" id="settingsLogout">Log out</button></div></div>
+    <div class="panel"><h3>Telemetry</h3><p class="hint">Estado de conexión</p><div class="setting-row"><div><strong>Analytics API</strong><p>Verificando conexión…</p></div><span class="zero-tag">OFFLINE</span></div><div class="setting-row"><div><strong>Data collection</strong><p>Los datos permanentes registran instalaciones, país aproximado y versión del launcher.</p></div><span class="zero-tag">DISABLED</span></div></div>
    </div>
-   <div class="panel" style="margin-top:14px"><h3>About this dashboard</h3><p class="hint">Fvrever Analytics · Monochrome interface · All counters start at zero. This standalone HTML file does not connect to a database or collect launcher telemetry.</p></div>
+   <div class="panel" style="margin-top:14px"><h3>About this dashboard</h3><p class="hint">Fvrever Analytics · Monochrome interface · All counters start at zero. Conectado a la API privada de Vercel y a Supabase. Los eventos opcionales requieren consentimiento.</p></div>
   </section>
  </main>
 </div>
@@ -112,85 +112,52 @@ nav{display:grid;gap:4px}nav button{background:transparent;border:0;color:#999;t
 <div id="toast" class="toast hidden" role="status"></div>
 <script>
 "use strict";
-/*
- * Password verification uses PBKDF2-SHA-256 with per-password salts.
- * This is a client-side access gate, NOT server-side authentication.
- * Anyone who can edit this static site can bypass the gate.
- */
-const AUTH = {
-  iterations: 310000,
-  initialSalt: "/MK2tuFWjOVQu8yhuZlRkA==",
-  initialHash: "PlG+b+EqLt+Fc1/Yx3vVPsGD9jYgUGj9qrhDQPKHqnQ=",
-  recoverySalt: "YjNXuPX2fyZxkrL9Xbla/Q==",
-  recoveryHash: "61xdWKBlxweVroFJWBSsl8h7OfGSK/Ek90R9C2y4I0Q="
-};
-const encoder = new TextEncoder();
-const toBytes = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-const toB64 = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes)));
-async function derive(password, saltB64) {
-  const key = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:toBytes(saltB64),iterations:AUTH.iterations},key,256);
-  return toB64(bits);
-}
-function equal(a,b) {
-  if (a.length !== b.length) return false;
-  let diff = 0; for (let i=0;i<a.length;i++) diff |= a.charCodeAt(i)^b.charCodeAt(i);
-  return diff === 0;
-}
+
 const $ = id => document.getElementById(id);
-let credential = null;
-function getCredential() {
-  try { const raw=localStorage.getItem("fvrever.auth.v1"); return raw ? JSON.parse(raw) : null; } catch { return null; }
+async function api(path, options={}) {
+  const response=await fetch(path,{credentials:"same-origin",cache:"no-store",...options,
+    headers:{"Content-Type":"application/json",...(options.headers||{})}});
+  let data={}; try{data=await response.json()}catch{}
+  if(!response.ok) throw new Error(data.error||"Error de conexión");
+  return data;
 }
-async function verify(password) {
-  const c = getCredential();
-  const salt = c?.salt || AUTH.initialSalt;
-  const expected = c?.hash || AUTH.initialHash;
-  return equal(await derive(password,salt),expected);
-}
-async function verifyRecovery(password) {
-  return equal(await derive(password,AUTH.recoverySalt),AUTH.recoveryHash);
-}
-function enterApp() {
-  $("login").classList.add("hidden"); $("app").classList.remove("hidden");
-  $("loginPassword").value=""; $("loginError").textContent="";
-}
-function logout() {
-  $("app").classList.add("hidden"); $("login").classList.remove("hidden");
-  $("loginPassword").value=""; $("loginPassword").focus();
-}
-$("loginForm").addEventListener("submit", async e => {
-  e.preventDefault(); const btn=e.submitter; btn.disabled=true; btn.textContent="Verificando…";
-  try { if(await verify($("loginPassword").value)) enterApp(); else $("loginError").textContent="Contraseña incorrecta."; }
-  catch(err){ $("loginError").textContent="No se pudo verificar. Abre el sitio mediante HTTPS o localhost."; }
-  finally {btn.disabled=false;btn.textContent="Entrar al panel";}
+function enterApp(){ $("login").classList.add("hidden"); $("app").classList.remove("hidden"); $("loginPassword").value=""; $("loginError").textContent=""; loadDashboard(); }
+function logout(){ api("/api/auth",{method:"DELETE"}).catch(()=>{}); $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("loginPassword").value=""; $("loginPassword").focus(); }
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault(); const btn=e.submitter; btn.disabled=true; btn.textContent="Verificando…";
+ try{await api("/api/auth",{method:"POST",body:JSON.stringify({password:$("loginPassword").value})});enterApp();}
+ catch(err){$("loginError").textContent=err.message;}
+ finally{btn.disabled=false;btn.textContent="Entrar al panel";}
 });
 $("logoutBtn").addEventListener("click",logout); $("settingsLogout").addEventListener("click",logout);
 const pageNames={overview:"Overview",analytics:"Analytics",installations:"Installations",countries:"Countries",versions:"Versions",errors:"Errors",licenses:"Licenses",settings:"Settings"};
 document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>{
-  document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b===btn));
-  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+btn.dataset.page));
-  $("pageTitle").textContent=pageNames[btn.dataset.page]; $("crumb").textContent=pageNames[btn.dataset.page];
+ document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b===btn));
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+btn.dataset.page));
+ $("pageTitle").textContent=pageNames[btn.dataset.page]; $("crumb").textContent=pageNames[btn.dataset.page];
 }));
-function showToast(message){$("toast").textContent=message;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),2600);}
-$("changePassBtn").addEventListener("click",()=>{$("changeModal").classList.remove("hidden");$("changeError").textContent="";$("changeForm").reset();});
-$("cancelChange").addEventListener("click",()=>$("changeModal").classList.add("hidden"));
-$("changeModal").addEventListener("click",e=>{if(e.target===$("changeModal"))$("changeModal").classList.add("hidden");});
-$("changeForm").addEventListener("submit",async e=>{
- e.preventDefault(); const submit=e.submitter; submit.disabled=true; submit.textContent="Saving…"; $("changeError").textContent="";
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function fmt(s){if(!s)return "—";try{return new Date(s).toLocaleString("es")}catch{return s}}
+function setMetric(cardIndex,value){const el=document.querySelectorAll("#page-overview .card .metric")[cardIndex];if(el)el.textContent=value??"0";}
+async function loadDashboard(){
  try{
-  const current=$("currentPass").value, recovery=$("recoveryPass").value, next=$("newPass").value, confirm=$("confirmPass").value;
-  if(!(await verify(current))) throw Error("La contraseña actual no es correcta.");
-  if(!(await verifyRecovery(recovery))) throw Error("La contraseña de respaldo no es correcta.");
-  if(next.length<10) throw Error("Usa al menos 10 caracteres para la nueva contraseña.");
-  if(next!==confirm) throw Error("Las nuevas contraseñas no coinciden.");
-  const salt=toB64(crypto.getRandomValues(new Uint8Array(16)));
-  const hash=await derive(next,salt);
-  localStorage.setItem("fvrever.auth.v1",JSON.stringify({salt,hash,iterations:AUTH.iterations}));
-  $("changeModal").classList.add("hidden"); showToast("Contraseña actualizada en este navegador.");
- }catch(err){$("changeError").textContent=err.message||"No se pudo cambiar la contraseña.";}
- finally{submit.disabled=false;submit.textContent="Save password";}
-});
+  const d=await api("/api/dashboard");
+  setMetric(0,d.total_installations);setMetric(1,d.active_today);setMetric(2,d.total_launches);
+  const tbody=document.querySelector("#page-overview table tbody");
+  if(tbody){tbody.innerHTML=d.installations.slice(0,12).map(x=>`<tr><td>${esc(x.installation_id.slice(0,8))}…</td><td>${esc(x.launcher_version)}</td><td>—</td><td>${esc(fmt(x.last_seen))}</td><td><span class="zero-tag">REGISTERED</span></td></tr>`).join("")||'<tr><td colspan="5" style="text-align:center;padding:25px;color:#666">No installations recorded</td></tr>';}
+  const install=document.querySelector("#page-installations .empty");
+  if(install)install.innerHTML=`<div><b>${d.total_installations} installations</b>${d.installations.length} registros recientes cargados</div>`;
+  const countries=document.querySelector("#page-countries .empty");
+  if(countries)countries.innerHTML='<div><b>Distribución por país</b>'+Object.entries(d.countries).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<p>${esc(k)} · ${v}</p>`).join("")+'</div>';
+  const versions=document.querySelector("#page-versions .empty");
+  if(versions)versions.innerHTML='<div><b>Versiones del launcher FVREVER</b>'+Object.entries(d.versions).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<p>${esc(k)} · ${v} instalaciones</p>`).join("")+'</div>';
+  const analytics=document.querySelector("#page-analytics .panel .empty");
+  if(analytics)analytics.innerHTML=`<div><b>${d.total_launches} eventos opcionales</b>Los eventos solo se guardan cuando el usuario acepta compartir estadísticas.</div>`;
+  const status=document.querySelector("#page-settings .settings-grid .panel:nth-child(2)");
+  if(status){const rows=status.querySelectorAll(".setting-row");if(rows[0])rows[0].innerHTML='<div><strong>Analytics API</strong><p>Conectada a Vercel y Supabase</p></div><span class="zero-tag">ONLINE</span>';if(rows[1])rows[1].innerHTML='<div><strong>Datos permanentes</strong><p>Identificador anónimo, país aproximado y versión del launcher.</p></div><span class="zero-tag">ACTIVE</span>';}
+ }catch(err){console.error(err);const status=document.querySelector(".top .status");if(status)status.textContent="API desconectada";}
+}
+api("/api/auth").then(()=>enterApp()).catch(()=>{});
 </script>
 </body>
 </html>
