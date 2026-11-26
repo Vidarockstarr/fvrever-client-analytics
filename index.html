@@ -3,57 +3,61 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080808">
-<title>Fvrever Analytics</title>
+<meta name="theme-color" content="#090b12">
+<title>FVREVER Analytics</title>
 <style>
-:root{color-scheme:dark;--bg:#080808;--panel:#101010;--panel2:#151515;--line:#292929;--muted:#929292;--text:#f4f4f4;--white:#fff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
-#login{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 15%,#1c1c1c 0,transparent 55%),#080808}
-.login-card{width:min(420px,100%);border:1px solid var(--line);background:#0e0e0e;padding:34px;border-radius:18px;box-shadow:0 24px 90px #0009}
-.logo{width:42px;height:42px;border:1px solid #555;border-radius:12px;display:grid;place-items:center;font-weight:800;letter-spacing:-2px;font-size:19px;margin-bottom:25px}
-h1{font-size:25px;letter-spacing:-.8px;margin:0 0 5px}.sub{color:var(--muted);margin:0 0 26px}
-label{display:block;color:#c9c9c9;font-size:12px;margin:14px 0 7px}
-input{width:100%;background:#080808;border:1px solid #333;color:white;border-radius:9px;padding:12px 13px;outline:none}
-input:focus{border-color:#aaa;box-shadow:0 0 0 3px #fff1}
-.btn{border:1px solid #eee;background:#f3f3f3;color:#090909;padding:11px 15px;border-radius:9px;font-weight:700}
-.btn:hover{background:#d9d9d9}.btn.secondary{background:#171717;color:#eee;border-color:#383838}.btn.secondary:hover{background:#222}
-.btn.full{width:100%;margin-top:20px}.error{color:#ff8585;font-size:12px;min-height:18px;margin-top:10px}
-#app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:238px;border-right:1px solid var(--line);padding:23px 16px;background:#0b0b0b;display:flex;flex-direction:column;z-index:3}
-.brand{display:flex;align-items:center;gap:11px;padding:0 8px 28px}.brand .logo{width:34px;height:34px;margin:0;border-radius:10px;font-size:15px}.brand strong{font-size:14px;letter-spacing:.2px}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:1px}
-.nav-label{color:#666;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;padding:12px 10px 8px}
-nav{display:grid;gap:4px}nav button{background:transparent;border:0;color:#999;text-align:left;padding:10px 11px;border-radius:8px;display:flex;gap:11px;align-items:center}nav button:hover,nav button.active{background:#202020;color:#fff}nav .ico{width:17px;text-align:center;color:#aaa}
-.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:16px 8px 0;color:#777;font-size:11px}
-.main{margin-left:238px;padding:30px 34px;max-width:1600px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:30px}.eyebrow{color:#777;text-transform:uppercase;font-size:10px;letter-spacing:1.6px}.top h2{margin:4px 0 0;font-size:25px;letter-spacing:-.7px}.top-actions{display:flex;gap:9px;align-items:center}
-.status{border:1px solid #333;border-radius:30px;padding:7px 11px;color:#aaa;font-size:11px}.status:before{content:"";display:inline-block;width:6px;height:6px;background:#aaa;border-radius:50%;margin:0 7px 1px 0}
-.page{display:none}.page.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:end;margin:26px 0 14px}.section-head h3{font-size:15px;margin:0}.section-head p{color:#777;margin:3px 0 0;font-size:12px}
-.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.card,.panel{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:17px}.metric-top{display:flex;justify-content:space-between;color:#999;font-size:12px}.metric{font-size:29px;font-weight:700;letter-spacing:-1px;margin:14px 0 2px}.metric-note{font-size:11px;color:#777}
-.content-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:13px}.panel h3{font-size:13px;margin:0}.panel .hint{color:#777;font-size:11px;margin:3px 0 18px}
-.chart{height:180px;display:flex;align-items:end;gap:10px;padding:10px 5px 0;border-bottom:1px solid #333;background:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,#222 44px,#222 45px)}
-.bar{flex:1;height:2px;background:#777;border-radius:4px 4px 0 0;opacity:.7}.chart-labels{display:flex;justify-content:space-between;color:#666;font-size:10px;padding:8px 3px 0}
-.empty{height:155px;display:grid;place-items:center;text-align:center;color:#777;font-size:12px}.empty b{display:block;color:#aaa;font-size:13px;margin-bottom:4px}
-.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;white-space:nowrap}.table th{text-align:left;color:#777;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:600;padding:11px 10px;border-bottom:1px solid #333}.table td{padding:13px 10px;border-bottom:1px solid #222;color:#aaa;font-size:12px}.table tr:last-child td{border-bottom:0}
-.zero-tag{border:1px solid #333;border-radius:5px;padding:3px 7px;color:#aaa;font-size:10px}
-.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.setting-row{display:flex;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid #252525}.setting-row:last-child{border:0}.setting-row strong{font-size:12px}.setting-row p{margin:3px 0 0;color:#777;font-size:11px}.toggle{width:34px;height:19px;border-radius:20px;background:#333;border:1px solid #555;position:relative;flex:none}.toggle:after{content:"";position:absolute;width:13px;height:13px;left:2px;top:2px;background:#aaa;border-radius:50%}
-.modal-back{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:20px;z-index:10}.modal{width:min(440px,100%);background:#111;border:1px solid #393939;border-radius:14px;padding:24px;box-shadow:0 25px 100px #000}.modal h3{margin:0 0 5px}.modal p{color:#888;font-size:12px;margin:0 0 18px}.modal-actions{display:flex;justify-content:end;gap:8px;margin-top:20px}
-.toast{position:fixed;bottom:22px;right:22px;background:#eee;color:#111;padding:11px 15px;border-radius:9px;font-size:12px;font-weight:700;z-index:20}
-@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.content-grid{grid-template-columns:1fr}}
-@media(max-width:700px){.sidebar{position:static;width:auto;height:auto;padding:12px;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:0 5px 10px}.nav-label,.side-bottom{display:none}nav{display:flex;overflow:auto}nav button{white-space:nowrap;padding:8px}.main{margin:0;padding:22px 15px}.top{align-items:flex-start;flex-direction:column}.settings-grid{grid-template-columns:1fr}}
+:root{color-scheme:dark;--bg:#090b12;--sidebar:#0d1019;--panel:#121725;--panel2:#171e2e;--line:#252e42;--muted:#8792a8;--text:#f2f5fc;--blue:#6d8cff;--cyan:#42d6e8;--purple:#ad83ff;--green:#39d99a;--orange:#ffb86b;--pink:#ff78b7;--shadow:0 18px 55px #0005}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% -10%,#1c2850 0,transparent 36%),var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+#login{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 10%,#273766 0,transparent 45%),var(--bg)}
+.login-card{width:min(430px,100%);border:1px solid #35415e;background:#111827ed;padding:36px;border-radius:22px;box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+.logo{width:46px;height:46px;border:1px solid #7188ff66;background:linear-gradient(145deg,#6d8cff,#9b73ff);border-radius:15px;display:grid;place-items:center;font-weight:900;font-size:20px;margin-bottom:25px;box-shadow:0 8px 24px #6d8cff33;color:white}
+h1{font-size:26px;letter-spacing:-.8px;margin:0 0 5px}.sub{color:var(--muted);margin:0 0 26px}
+label{display:block;color:#cbd4e7;font-size:12px;margin:14px 0 7px}
+input{width:100%;background:#0b101b;border:1px solid #303b53;color:white;border-radius:11px;padding:13px;outline:none}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #6d8cff22}
+.btn{border:1px solid transparent;background:linear-gradient(110deg,#718cff,#9b79ff);color:white;padding:11px 16px;border-radius:11px;font-weight:750;box-shadow:0 7px 20px #718cff22;transition:.2s}
+.btn:hover{filter:brightness(1.12);transform:translateY(-1px)}.btn.secondary{background:#1a2233;color:#dce5f8;border-color:#34405a;box-shadow:none}.btn.secondary:hover{background:#222d43}.btn.full{width:100%;margin-top:20px}.error{color:#ff929b;font-size:12px;min-height:18px;margin-top:10px}
+#app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:250px;border-right:1px solid var(--line);padding:24px 17px;background:#0c1019ed;backdrop-filter:blur(18px);display:flex;flex-direction:column;z-index:3}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px 32px}.brand .logo{width:37px;height:37px;margin:0;border-radius:12px;font-size:16px}.brand strong{font-size:14px;letter-spacing:.2px}.brand small{display:block;color:#74809a;font-size:10px;margin-top:2px;letter-spacing:1.1px}
+.nav-label{color:#68748d;font-size:10px;text-transform:uppercase;letter-spacing:1.6px;padding:12px 11px 9px;font-weight:800}
+nav{display:grid;gap:5px}nav button{background:transparent;border:1px solid transparent;color:#94a0b7;text-align:left;padding:11px 12px;border-radius:11px;display:flex;gap:12px;align-items:center;transition:.18s;font-weight:600}nav button:hover{background:#171e2d;color:white}nav button.active{background:linear-gradient(100deg,#718cff25,#a17cff16);border-color:#718cff35;color:#fff;box-shadow:inset 3px 0 #8298ff}
+.ico{width:20px;height:20px;display:grid;place-items:center;color:#9baeff;font-size:16px}
+.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:17px 8px 0;color:#77839b;font-size:11px;line-height:1.8}.side-bottom b{color:#b8c4dc}.online-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px #39d99a;margin-right:7px}
+.main{margin-left:250px;padding:32px 38px;max-width:1750px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:30px}.eyebrow{color:#8490a8;text-transform:uppercase;font-size:10px;letter-spacing:1.7px;font-weight:750}.top h2{margin:5px 0 0;font-size:27px;letter-spacing:-.8px}.top-actions{display:flex;gap:10px;align-items:center}
+.status{border:1px solid #285b4b;background:#14372d66;border-radius:30px;padding:8px 12px;color:#79e4b7;font-size:11px;font-weight:700}.status:before{content:"";display:inline-block;width:7px;height:7px;background:var(--green);border-radius:50%;margin:0 8px 1px 0;box-shadow:0 0 9px #39d99a}
+.page{display:none}.page.active{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.card,.panel{border:1px solid var(--line);background:linear-gradient(145deg,#151c2b,#101522);border-radius:16px;padding:19px;box-shadow:0 8px 28px #0002}
+.card{position:relative;overflow:hidden;min-height:142px}.card:after{content:"";position:absolute;width:115px;height:115px;border-radius:50%;right:-42px;top:-47px;background:var(--glow,#718cff);filter:blur(45px);opacity:.2}
+.metric-top{display:flex;justify-content:space-between;align-items:center;color:#aab5ca;font-size:12px;font-weight:650;position:relative;z-index:1}.metric-icon{width:33px;height:33px;border-radius:10px;display:grid;place-items:center;background:var(--iconbg,#718cff20);color:var(--accent,#8ba0ff);font-size:16px}
+.metric{font-size:32px;font-weight:800;letter-spacing:-1.2px;margin:13px 0 0;position:relative;z-index:1}.metric-note{font-size:11px;color:#7f8ba3;position:relative;z-index:1}.metric-blue{--accent:#91a5ff;--iconbg:#718cff22;--glow:#718cff}.metric-cyan{--accent:#5ce1ed;--iconbg:#42d6e822;--glow:#42d6e8}.metric-purple{--accent:#c3a0ff;--iconbg:#ad83ff22;--glow:#ad83ff}.metric-green{--accent:#61e7b0;--iconbg:#39d99a22;--glow:#39d99a}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:28px 0 14px}.section-head h3{font-size:15px;margin:0;font-weight:750}.section-head p{color:#8290a8;margin:3px 0 0;font-size:12px}
+.content-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:15px}.panel h3{font-size:13px;margin:0;font-weight:750}.panel .hint{color:#8190a8;font-size:11px;margin:4px 0 17px}
+.chart-area{height:210px;position:relative}.chart-area svg{width:100%;height:100%;overflow:visible}.chart-grid{stroke:#293248;stroke-width:1;stroke-dasharray:4 5}.chart-line{fill:none;stroke:#8297ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart-fill{fill:url(#areaGradient);opacity:.23}.chart-point{fill:#a8b8ff;stroke:#151c2b;stroke-width:3}
+.chart-empty{height:190px;display:grid;place-items:center;text-align:center;color:#8490a8;font-size:12px;border:1px dashed #34405a;border-radius:12px;padding:20px}.chart-empty b{display:block;color:#d2dbec;font-size:13px;margin-bottom:5px}
+.donut-layout{display:flex;align-items:center;gap:22px;min-height:190px}.donut{width:155px;height:155px;border-radius:50%;background:conic-gradient(#718cff 0 100%);position:relative;flex:none}.donut:after{content:"";position:absolute;inset:23px;background:#121927;border-radius:50%}.donut-center{position:absolute;inset:0;z-index:1;display:grid;place-content:center;text-align:center}.donut-center strong{font-size:25px}.donut-center span{font-size:10px;color:#8290a8}.legend{display:grid;gap:11px;min-width:0;flex:1}.legend-row{display:flex;align-items:center;justify-content:space-between;gap:9px;font-size:11px;color:#c4cee0}.legend-name{display:flex;align-items:center;gap:8px;min-width:0}.legend-name span:last-child{overflow:hidden;text-overflow:ellipsis}.swatch{width:8px;height:8px;border-radius:3px;flex:none}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;white-space:nowrap}.table th{text-align:left;color:#8190a8;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:750;padding:12px 11px;border-bottom:1px solid #2a344a}.table td{padding:14px 11px;border-bottom:1px solid #222c40;color:#b9c4d8;font-size:12px}.table tr:last-child td{border-bottom:0}.table tbody tr:hover{background:#ffffff05}.zero-tag{border:1px solid #34415a;background:#1a2334;border-radius:7px;padding:4px 8px;color:#b6c5e3;font-size:10px;font-weight:700}.country-flag{font-size:19px;vertical-align:middle;margin-right:9px}.country-code{color:#7e8ba4;font-size:10px;margin-left:6px}
+.bar-list{display:grid;gap:15px}.bar-row{display:grid;grid-template-columns:minmax(100px,145px) 1fr 35px;gap:12px;align-items:center;font-size:11px;color:#c3cee0}.bar-track{height:9px;background:#252f44;border-radius:20px;overflow:hidden}.bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#718cff,#b07cff);min-width:2px}.bar-count{text-align:right;color:#91a0ba;font-variant-numeric:tabular-nums}
+.empty{min-height:150px;display:grid;place-items:center;text-align:center;color:#8793a9;font-size:12px;padding:20px}.empty b{display:block;color:#d4dced;font-size:13px;margin-bottom:5px}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.setting-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:15px 0;border-bottom:1px solid #263047}.setting-row:last-child{border:0}.setting-row strong{font-size:12px}.setting-row p{margin:3px 0 0;color:#8490a8;font-size:11px}
+.toast{position:fixed;bottom:22px;right:22px;background:#e7edff;color:#101827;padding:11px 15px;border-radius:10px;font-size:12px;font-weight:750;z-index:20}
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.content-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.sidebar{position:static;width:auto;height:auto;padding:13px 14px;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:0 5px 12px}.nav-label,.side-bottom{display:none}nav{display:flex;overflow:auto;padding-bottom:2px}nav button{white-space:nowrap;padding:9px 11px}.main{margin:0;padding:23px 15px}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%;justify-content:space-between}.settings-grid{grid-template-columns:1fr}.donut-layout{flex-wrap:wrap}.donut{width:130px;height:130px}.legend{min-width:150px}}
+@media(max-width:440px){.cards{grid-template-columns:1fr 1fr;gap:9px}.card{padding:14px;min-height:130px}.metric{font-size:26px}.metric-top{font-size:11px}.main{padding-inline:12px}.top h2{font-size:24px}}
 </style>
 </head>
 <body>
 <section id="login">
  <div class="login-card">
-  <div class="logo">F.</div><h1>Fvrever Analytics</h1><p class="sub">Panel privado · Introduce tu contraseña para continuar.</p>
+  <div class="logo">F.</div><h1>FVREVER Analytics</h1><p class="sub">Panel privado · Introduce tu contraseña para continuar.</p>
   <form id="loginForm"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" required autofocus><button class="btn full" type="submit">Entrar al panel</button><div class="error" id="loginError" role="alert"></div></form>
  </div>
 </section>
 <div id="app" class="hidden">
  <aside class="sidebar">
-  <div class="brand"><div class="logo">F.</div><div><strong>Fvrever Analytics</strong><small>PRIVATE DASHBOARD</small></div></div>
+  <div class="brand"><div class="logo">F.</div><div><strong>FVREVER Analytics</strong><small>PRIVATE DASHBOARD</small></div></div>
   <div class="nav-label">Workspace</div>
   <nav id="nav">
-   <button class="active" data-page="overview"><span class="ico">◫</span>Overview</button>
+   <button class="active" data-page="overview"><span class="ico">▦</span>Overview</button>
    <button data-page="analytics"><span class="ico">▥</span>Analytics</button>
    <button data-page="installations"><span class="ico">⌘</span>Installations</button>
    <button data-page="countries"><span class="ico">◎</span>Countries</button>
@@ -61,102 +65,74 @@ nav{display:grid;gap:4px}nav button{background:transparent;border:0;color:#999;t
    <button data-page="errors"><span class="ico">△</span>Errors</button>
    <button data-page="licenses"><span class="ico">▤</span>Licenses</button>
   </nav>
-  <div class="nav-label">System</div>
-  <nav><button data-page="settings"><span class="ico">⚙</span>Settings</button></nav>
-  <div class="side-bottom">FVREVER · PRIVATE ACCESS<br>All systems idle</div>
+  <div class="nav-label">System</div><nav><button data-page="settings"><span class="ico">⚙</span>Settings</button></nav>
+  <div class="side-bottom"><span class="online-dot"></span><b>All systems operational</b><br>FVREVER · PRIVATE ACCESS</div>
  </aside>
  <main class="main">
   <header class="top"><div><div class="eyebrow">Workspace / <span id="crumb">Overview</span></div><h2 id="pageTitle">Overview</h2></div><div class="top-actions"><span class="status">System online</span><button class="btn secondary" id="logoutBtn">Cerrar sesión</button></div></header>
   <section class="page active" id="page-overview">
    <div class="cards">
-    <div class="card"><div class="metric-top"><span>Total installations</span><span>↗</span></div><div class="metric">0</div><div class="metric-note">All-time installations</div></div>
-    <div class="card"><div class="metric-top"><span>Active today</span><span>◷</span></div><div class="metric">0</div><div class="metric-note">Unique installations today</div></div>
-    <div class="card"><div class="metric-top"><span>Total launches</span><span>▷</span></div><div class="metric">0</div><div class="metric-note">Recorded launcher starts</div></div>
-    <div class="card"><div class="metric-top"><span>Active licenses</span><span>◇</span></div><div class="metric">0</div><div class="metric-note">Currently active licenses</div></div>
+    <div class="card metric-blue"><div class="metric-top"><span>Total installations</span><span class="metric-icon">↗</span></div><div class="metric" id="m-installations">—</div><div class="metric-note">All-time installations</div></div>
+    <div class="card metric-cyan"><div class="metric-top"><span>Active today</span><span class="metric-icon">◷</span></div><div class="metric" id="m-active">—</div><div class="metric-note">Unique installations today</div></div>
+    <div class="card metric-purple"><div class="metric-top"><span>Total launches</span><span class="metric-icon">▷</span></div><div class="metric" id="m-launches">—</div><div class="metric-note">Recorded launcher starts</div></div>
+    <div class="card metric-green"><div class="metric-top"><span>Active licenses</span><span class="metric-icon">◇</span></div><div class="metric" id="m-licenses">0</div><div class="metric-note">Currently active licenses</div></div>
    </div>
-   <div class="section-head"><div><h3>Activity overview</h3><p>Usage activity over the last 14 days</p></div><span class="zero-tag">NO DATA</span></div>
+   <div class="section-head"><div><h3>Activity overview</h3><p>Real usage data reported by the launcher</p></div><span class="zero-tag" id="activityTag">WAITING FOR DATA</span></div>
    <div class="content-grid">
-    <div class="panel"><h3>Launch activity</h3><p class="hint">Daily launcher launches</p><div class="chart" aria-label="No activity data"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="chart-labels"><span>14 days ago</span><span>Today</span></div></div>
-    <div class="panel"><h3>Top Minecraft versions</h3><p class="hint">Distribution by game version</p><div class="empty"><div><b>No version data</b>Versions will appear here after telemetry is connected.</div></div></div>
+    <div class="panel"><h3>Launch activity</h3><p class="hint">Daily launcher launches</p><div class="chart-empty"><div><b>Daily activity is not available yet</b>The current API provides total launches, but not a daily history series. This chart will populate when that data is added.</div></div></div>
+    <div class="panel"><h3>Installations by country</h3><p class="hint">Country distribution from registered installations</p><div id="countryChart" class="donut-layout"><div class="empty">Loading country data…</div></div></div>
    </div>
    <div class="section-head"><div><h3>Recent installations</h3><p>Latest devices registered by the launcher</p></div></div>
-   <div class="panel table-wrap"><table class="table"><thead><tr><th>Installation</th><th>Launcher</th><th>Minecraft</th><th>Last seen</th><th>Status</th></tr></thead><tbody><tr><td colspan="5" style="text-align:center;padding:25px;color:#666">No installations recorded</td></tr></tbody></table></div>
+   <div class="panel table-wrap"><table class="table"><thead><tr><th>Installation</th><th>Launcher</th><th>Minecraft</th><th>Last seen</th><th>Status</th></tr></thead><tbody id="recentRows"><tr><td colspan="5" style="text-align:center">Loading installations…</td></tr></tbody></table></div>
   </section>
-  <section class="page" id="page-analytics"><div class="cards"><div class="card"><div class="metric-top">Launches</div><div class="metric">0</div><div class="metric-note">Total events</div></div><div class="card"><div class="metric-top">Daily users</div><div class="metric">0</div><div class="metric-note">Unique installations</div></div><div class="card"><div class="metric-top">Sessions</div><div class="metric">0</div><div class="metric-note">Recorded sessions</div></div><div class="card"><div class="metric-top">Avg. session</div><div class="metric">0s</div><div class="metric-note">No sessions yet</div></div></div><div class="panel" style="margin-top:14px"><h3>Analytics events</h3><div class="empty"><div><b>No analytics yet</b>Connect the launcher to a telemetry API to populate this page.</div></div></div></section>
-  <section class="page" id="page-installations"><div class="panel"><h3>Installations</h3><p class="hint">Registered launcher installations</p><div class="empty"><div><b>0 installations</b>No installation records are available.</div></div></div></section>
-  <section class="page" id="page-countries"><div class="panel"><h3>Countries</h3><p class="hint">Approximate country distribution, when consented</p><div class="empty"><div><b>No geographic data</b>No country information has been collected.</div></div></div></section>
-  <section class="page" id="page-versions"><div class="panel"><h3>Versions</h3><p class="hint">Launcher and Minecraft version distribution</p><div class="empty"><div><b>No version data</b>Version statistics will appear here when connected.</div></div></div></section>
-  <section class="page" id="page-errors"><div class="panel"><h3>Errors & crashes</h3><p class="hint">Diagnostics voluntarily shared by users</p><div class="empty"><div><b>No reported errors</b>There are no crash reports.</div></div></div></section>
-  <section class="page" id="page-licenses">
-   <div class="cards"><div class="card"><div class="metric-top">Total licenses</div><div class="metric">0</div></div><div class="card"><div class="metric-top">Active</div><div class="metric">0</div></div><div class="card"><div class="metric-top">Revoked</div><div class="metric">0</div></div><div class="card"><div class="metric-top">Activations</div><div class="metric">0</div></div></div>
-   <div class="panel" style="margin-top:14px"><h3>License management</h3><div class="empty"><div><b>No licenses created</b>License management will require a secure backend.</div></div></div>
+  <section class="page" id="page-analytics">
+   <div class="cards"><div class="card metric-purple"><div class="metric-top">Launches</div><div class="metric" id="a-launches">—</div><div class="metric-note">Total recorded starts</div></div><div class="card metric-cyan"><div class="metric-top">Daily users</div><div class="metric" id="a-users">—</div><div class="metric-note">Unique installations today</div></div><div class="card metric-blue"><div class="metric-top">Sessions</div><div class="metric">—</div><div class="metric-note">Not provided by current API</div></div><div class="card metric-green"><div class="metric-top">Avg. session</div><div class="metric">—</div><div class="metric-note">Not provided by current API</div></div></div>
+   <div class="panel" style="margin-top:15px"><h3>Analytics events</h3><p class="hint">Optional events shared with consent</p><div class="empty"><div><b id="eventSummary">Loading…</b>Only consented events are stored. The current API summary does not include an event timeline.</div></div></div>
   </section>
-  <section class="page" id="page-settings">
-   <div class="settings-grid">
-    <div class="panel"><h3>Security</h3><p class="hint">Server dashboard access</p><div class="setting-row"><div><strong>Change password</strong><p>La contraseña se configura en las variables de entorno de Vercel.</p></div><span class="zero-tag">VERCEL ENV</span></div><div class="setting-row"><div><strong>Session</strong><p>End this browser session.</p></div><button class="btn secondary" id="settingsLogout">Log out</button></div></div>
-    <div class="panel"><h3>Telemetry</h3><p class="hint">Estado de conexión</p><div class="setting-row"><div><strong>Analytics API</strong><p>Verificando conexión…</p></div><span class="zero-tag">OFFLINE</span></div><div class="setting-row"><div><strong>Data collection</strong><p>Los datos permanentes registran instalaciones, país aproximado y versión del launcher.</p></div><span class="zero-tag">DISABLED</span></div></div>
-   </div>
-   <div class="panel" style="margin-top:14px"><h3>About this dashboard</h3><p class="hint">Fvrever Analytics · Monochrome interface · All counters start at zero. Conectado a la API privada de Vercel y a Supabase. Los eventos opcionales requieren consentimiento.</p></div>
-  </section>
+  <section class="page" id="page-installations"><div class="panel"><h3>Installations</h3><p class="hint">Registered launcher installations</p><div class="table-wrap"><table class="table"><thead><tr><th>Installation</th><th>Launcher version</th><th>Country</th><th>First seen</th><th>Last seen</th></tr></thead><tbody id="allRows"></tbody></table></div></div></section>
+  <section class="page" id="page-countries"><div class="content-grid"><div class="panel"><h3>Countries</h3><p class="hint">Approximate country distribution</p><div id="countryList" class="bar-list"></div></div><div class="panel"><h3>Geographic summary</h3><p class="hint">Registered installations by country</p><div id="countrySummary" class="empty">Loading…</div></div></div></section>
+  <section class="page" id="page-versions"><div class="panel"><h3>Launcher versions</h3><p class="hint">Distribution across registered installations</p><div id="versionList" class="bar-list"></div></div></section>
+  <section class="page" id="page-errors"><div class="panel"><h3>Errors & crashes</h3><p class="hint">Diagnostics voluntarily shared by users</p><div class="empty"><div><b>No error feed is connected</b>The current telemetry API does not send crash reports.</div></div></div></section>
+  <section class="page" id="page-licenses"><div class="cards"><div class="card metric-blue"><div class="metric-top">Total licenses</div><div class="metric">0</div></div><div class="card metric-green"><div class="metric-top">Active</div><div class="metric">0</div></div><div class="card metric-orange"><div class="metric-top">Revoked</div><div class="metric">0</div></div><div class="card metric-purple"><div class="metric-top">Activations</div><div class="metric">0</div></div></div><div class="panel" style="margin-top:15px"><h3>License management</h3><div class="empty"><div><b>No licenses created</b>License management requires a dedicated secure backend.</div></div></div></section>
+  <section class="page" id="page-settings"><div class="settings-grid">
+   <div class="panel"><h3>Security</h3><p class="hint">Server dashboard access</p><div class="setting-row"><div><strong>Change password</strong><p>La contraseña se configura en las variables de entorno de Vercel.</p></div><span class="zero-tag">VERCEL ENV</span></div><div class="setting-row"><div><strong>Session</strong><p>End this browser session.</p></div><button class="btn secondary" id="settingsLogout">Log out</button></div></div>
+   <div class="panel"><h3>Telemetry</h3><p class="hint">Connection status</p><div class="setting-row"><div><strong>Analytics API</strong><p id="apiDescription">Verificando conexión…</p></div><span class="zero-tag" id="apiStatus">CHECKING</span></div><div class="setting-row"><div><strong>Permanent data</strong><p>Anonymous installation ID, approximate country and launcher version.</p></div><span class="zero-tag">ACTIVE</span></div></div>
+  </div><div class="panel" style="margin-top:15px"><h3>About this dashboard</h3><p class="hint">FVREVER Analytics · Private dashboard · Connected to Vercel and Supabase. Optional analytics events require user consent.</p></div></section>
  </main>
-</div>
-<div class="modal-back hidden" id="changeModal">
- <form class="modal" id="changeForm"><h3>Change password</h3><p>Enter the recovery password to authorize this change. Your new password is stored as a derived hash in this browser.</p>
-  <label for="currentPass">Current password</label><input id="currentPass" type="password" autocomplete="current-password" required>
-  <label for="recoveryPass">Recovery password</label><input id="recoveryPass" type="password" autocomplete="off" required>
-  <label for="newPass">New password</label><input id="newPass" type="password" minlength="10" autocomplete="new-password" required>
-  <label for="confirmPass">Confirm new password</label><input id="confirmPass" type="password" minlength="10" autocomplete="new-password" required>
-  <div class="error" id="changeError"></div><div class="modal-actions"><button type="button" class="btn secondary" id="cancelChange">Cancel</button><button type="submit" class="btn">Save password</button></div>
- </form>
 </div>
 <div id="toast" class="toast hidden" role="status"></div>
 <script>
 "use strict";
-
-const $ = id => document.getElementById(id);
-async function api(path, options={}) {
-  const response=await fetch(path,{credentials:"same-origin",cache:"no-store",...options,
-    headers:{"Content-Type":"application/json",...(options.headers||{})}});
-  let data={}; try{data=await response.json()}catch{}
-  if(!response.ok) throw new Error(data.error||"Error de conexión");
-  return data;
-}
-function enterApp(){ $("login").classList.add("hidden"); $("app").classList.remove("hidden"); $("loginPassword").value=""; $("loginError").textContent=""; loadDashboard(); }
-function logout(){ api("/api/auth",{method:"DELETE"}).catch(()=>{}); $("app").classList.add("hidden"); $("login").classList.remove("hidden"); $("loginPassword").value=""; $("loginPassword").focus(); }
-$("loginForm").addEventListener("submit",async e=>{
- e.preventDefault(); const btn=e.submitter; btn.disabled=true; btn.textContent="Verificando…";
- try{await api("/api/auth",{method:"POST",body:JSON.stringify({password:$("loginPassword").value})});enterApp();}
- catch(err){$("loginError").textContent=err.message;}
- finally{btn.disabled=false;btn.textContent="Entrar al panel";}
-});
-$("logoutBtn").addEventListener("click",logout); $("settingsLogout").addEventListener("click",logout);
+const $=id=>document.getElementById(id);
+async function api(path,options={}){const response=await fetch(path,{credentials:"same-origin",cache:"no-store",...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});let data={};try{data=await response.json()}catch{}if(!response.ok)throw new Error(data.error||"Error de conexión");return data}
+function enterApp(){$("login").classList.add("hidden");$("app").classList.remove("hidden");$("loginPassword").value="";$("loginError").textContent="";loadDashboard()}
+function logout(){api("/api/auth",{method:"DELETE"}).catch(()=>{});$("app").classList.add("hidden");$("login").classList.remove("hidden");$("loginPassword").value="";$("loginPassword").focus()}
+$("loginForm").addEventListener("submit",async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;btn.textContent="Verificando…";try{await api("/api/auth",{method:"POST",body:JSON.stringify({password:$("loginPassword").value})});enterApp()}catch(err){$("loginError").textContent=err.message}finally{btn.disabled=false;btn.textContent="Entrar al panel"}});
+$("logoutBtn").addEventListener("click",logout);$("settingsLogout").addEventListener("click",logout);
 const pageNames={overview:"Overview",analytics:"Analytics",installations:"Installations",countries:"Countries",versions:"Versions",errors:"Errors",licenses:"Licenses",settings:"Settings"};
-document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>{
- document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b===btn));
- document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+btn.dataset.page));
- $("pageTitle").textContent=pageNames[btn.dataset.page]; $("crumb").textContent=pageNames[btn.dataset.page];
-}));
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function fmt(s){if(!s)return "—";try{return new Date(s).toLocaleString("es")}catch{return s}}
-function setMetric(cardIndex,value){const el=document.querySelectorAll("#page-overview .card .metric")[cardIndex];if(el)el.textContent=value??"0";}
-async function loadDashboard(){
- try{
-  const d=await api("/api/dashboard");
-  setMetric(0,d.total_installations);setMetric(1,d.active_today);setMetric(2,d.total_launches);
-  const tbody=document.querySelector("#page-overview table tbody");
-  if(tbody){tbody.innerHTML=d.installations.slice(0,12).map(x=>`<tr><td>${esc(x.installation_id.slice(0,8))}…</td><td>${esc(x.launcher_version)}</td><td>—</td><td>${esc(fmt(x.last_seen))}</td><td><span class="zero-tag">REGISTERED</span></td></tr>`).join("")||'<tr><td colspan="5" style="text-align:center;padding:25px;color:#666">No installations recorded</td></tr>';}
-  const install=document.querySelector("#page-installations .empty");
-  if(install)install.innerHTML=`<div><b>${d.total_installations} installations</b>${d.installations.length} registros recientes cargados</div>`;
-  const countries=document.querySelector("#page-countries .empty");
-  if(countries)countries.innerHTML='<div><b>Distribución por país</b>'+Object.entries(d.countries).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<p>${esc(k)} · ${v}</p>`).join("")+'</div>';
-  const versions=document.querySelector("#page-versions .empty");
-  if(versions)versions.innerHTML='<div><b>Versiones del launcher FVREVER</b>'+Object.entries(d.versions).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<p>${esc(k)} · ${v} instalaciones</p>`).join("")+'</div>';
-  const analytics=document.querySelector("#page-analytics .panel .empty");
-  if(analytics)analytics.innerHTML=`<div><b>${d.total_launches} eventos opcionales</b>Los eventos solo se guardan cuando el usuario acepta compartir estadísticas.</div>`;
-  const status=document.querySelector("#page-settings .settings-grid .panel:nth-child(2)");
-  if(status){const rows=status.querySelectorAll(".setting-row");if(rows[0])rows[0].innerHTML='<div><strong>Analytics API</strong><p>Conectada a Vercel y Supabase</p></div><span class="zero-tag">ONLINE</span>';if(rows[1])rows[1].innerHTML='<div><strong>Datos permanentes</strong><p>Identificador anónimo, país aproximado y versión del launcher.</p></div><span class="zero-tag">ACTIVE</span>';}
- }catch(err){console.error(err);const status=document.querySelector(".top .status");if(status)status.textContent="API desconectada";}
+document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b===btn));document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+btn.dataset.page));$("pageTitle").textContent=pageNames[btn.dataset.page];$("crumb").textContent=pageNames[btn.dataset.page]}));
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fmt(s){if(!s)return"—";try{return new Date(s).toLocaleString("es")}catch{return s}}
+const countryNames={SV:"El Salvador",US:"Estados Unidos",MX:"México",GT:"Guatemala",HN:"Honduras",NI:"Nicaragua",CR:"Costa Rica",PA:"Panamá",BZ:"Belice",CA:"Canadá",BR:"Brasil",AR:"Argentina",CL:"Chile",CO:"Colombia",PE:"Perú",EC:"Ecuador",VE:"Venezuela",ES:"España",FR:"Francia",DE:"Alemania",IT:"Italia",GB:"Reino Unido",PT:"Portugal",RU:"Rusia",JP:"Japón",KR:"Corea del Sur",CN:"China",IN:"India",AU:"Australia",NL:"Países Bajos",SE:"Suecia",NO:"Noruega",PL:"Polonia",TR:"Turquía",UA:"Ucrania"};
+function flag(code){if(!/^[A-Z]{2}$/.test(code||""))return"🌐";return String.fromCodePoint(...code.toUpperCase().split("").map(c=>127397+c.charCodeAt(0)))}
+function countryLabel(code){return countryNames[code]||code||"Desconocido"}
+const palette=["#718cff","#42d6e8","#ad83ff","#39d99a","#ffb86b","#ff78b7","#f5d76e","#65a9ff"];
+function renderCountries(countries){
+ const entries=Object.entries(countries||{}).sort((a,b)=>b[1]-a[1]);const total=entries.reduce((s,x)=>s+Number(x[1]||0),0);
+ const chart=$("countryChart");
+ if(!entries.length||!total){chart.innerHTML='<div class="empty"><div><b>No country data yet</b>Country codes will appear here when available.</div></div>';$("countryList").innerHTML='<div class="empty">No geographic data available.</div>';$("countrySummary").innerHTML='<div><b>0 countries</b>No country information received.</div>';return}
+ let cursor=0;const segments=entries.map((e,i)=>{const start=cursor;cursor+=Number(e[1])/total*100;return `${palette[i%palette.length]} ${start}% ${cursor}%`}).join(",");
+ chart.innerHTML=`<div class="donut" style="background:conic-gradient(${segments})"><div class="donut-center"><strong>${total}</strong><span>INSTALLATIONS</span></div></div><div class="legend">${entries.slice(0,6).map(([k,v],i)=>`<div class="legend-row"><div class="legend-name"><i class="swatch" style="background:${palette[i%palette.length]}"></i><span>${flag(k)} ${esc(countryLabel(k))}</span></div><b>${v}</b></div>`).join("")}</div>`;
+ $("countryList").innerHTML=entries.map(([k,v],i)=>`<div class="bar-row"><div>${flag(k)} ${esc(countryLabel(k))}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(1,Number(v)/total*100)}%;background:${palette[i%palette.length]}"></div></div><div class="bar-count">${v}</div></div>`).join("");
+ $("countrySummary").innerHTML=`<div><b>${entries.length} ${entries.length===1?"country":"countries"}</b>${total} registered installations<br><span style="color:#8c9ab2">${entries.map(([k,v])=>`${flag(k)} ${esc(countryLabel(k))} (${v})`).join(" · ")}</span></div>`;
 }
+function renderVersions(versions){const entries=Object.entries(versions||{}).sort((a,b)=>b[1]-a[1]);const total=entries.reduce((s,x)=>s+Number(x[1]||0),0);$("versionList").innerHTML=entries.length?entries.map(([k,v],i)=>`<div class="bar-row"><div>${esc(k)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(1,Number(v)/Math.max(total,1)*100)}%;background:${palette[i%palette.length]}"></div></div><div class="bar-count">${v}</div></div>`).join(""):'<div class="empty">No version data available.</div>'}
+function installationRows(items,full=false){if(!items?.length)return `<tr><td colspan="${full?5:5}" style="text-align:center;padding:25px;color:#8290a8">No installations recorded</td></tr>`;return items.map(x=>`<tr><td>${esc(String(x.installation_id||"").slice(0,8))}…</td><td>${esc(x.launcher_version||"—")}</td>${full?`<td>${flag(x.country)} ${esc(countryLabel(x.country))}</td><td>${esc(fmt(x.first_seen))}</td>`:'<td>—</td>'}<td>${esc(fmt(x.last_seen))}</td>${full?"":'<td><span class="zero-tag">REGISTERED</span></td>'}</tr>`).join("")}
+async function loadDashboard(){try{const d=await api("/api/dashboard");$("m-installations").textContent=d.total_installations??0;$("m-active").textContent=d.active_today??0;$("m-launches").textContent=d.total_launches??0;$("m-licenses").textContent=d.active_licenses??0;$("a-launches").textContent=d.total_launches??0;$("a-users").textContent=d.active_today??0;$("eventSummary").textContent=`${d.total_launches??0} recorded launcher starts`;
+const installs=Array.isArray(d.installations)?d.installations:[];$("recentRows").innerHTML=installationRows(installs.slice(0,12));$("allRows").innerHTML=installationRows(installs,true);
+renderCountries(d.countries||{});renderVersions(d.versions||{});
+$("apiDescription").textContent="Conectada a Vercel y Supabase";$("apiStatus").textContent="ONLINE";$("apiStatus").style.color="#79e4b7";
+}catch(err){console.error(err);$("apiDescription").textContent=err.message;$("apiStatus").textContent="OFFLINE";$("apiStatus").style.color="#ff929b";$("apiStatus").style.borderColor="#75404b";$("apiStatus").style.background="#3a1d2a";$("apiStatus").style.color="#ff9ca7";$("m-installations").textContent="—";$("m-active").textContent="—";$("m-launches").textContent="—"}}
 api("/api/auth").then(()=>enterApp()).catch(()=>{});
 </script>
 </body>
